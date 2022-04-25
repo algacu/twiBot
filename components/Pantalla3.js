@@ -1,97 +1,73 @@
+import { StatusBar } from 'expo-status-bar';
 import * as React from 'react';
 import { useEffect, useState } from 'react';
-import axios from 'axios';
-import { Image, ScrollView, Text, StyleSheet, View, Button} from 'react-native';
+import { StyleSheet, ScrollView, Text, View, Image, Pressable, Linking, SafeAreaView, KeyboardAvoidingView } from 'react-native';
 import { TextInput } from 'react-native-gesture-handler';
 
 
-const Pantalla3 = () => {
+const Pantalla3 = (props) => {
 
-    const [datos, setDatos] = useState([]);
-    const [search, setSearch] = useState('');
 
-    //Utilizo la API de Rick y Morty para obtener información de los personajes de la serie.
-
-    //Utilizo useEffect para lanzar getDatos y mostrar una información inicial al abrir la pantalla, con todos los personajes.
     useEffect(() => {
-        getDatos();
+
     }, [])
 
-    //Llamada a la Api. Construyo la uri pasándole el término de busqueda y recojo datos (array) con setDatos[];
-    const getDatos = async () => {
-        const resultado = await axios.get(`https://rickandmortyapi.com/api/character/?name=${search}`);
-        setDatos(resultado.data.results);
-    }
-
-    //Recorro el array de datos con la función Map. En este caso, genero un bloque vista 
-    //con los datos seleccionados de cada elemento del conjunto (incluyendo ID de cada elemento).
-    const lista = datos.map((personaje) => (
-        <View key={personaje.id} style={styles.tarjeta}>
-            <Image style={styles.imagen} source={{ uri: personaje.image }} />
-            <Text style={styles.nombre}>{personaje.name}</Text>
-            <Text style={styles.especie}>{personaje.species}</Text>
-        </View>
-    ));
-
     return (
-        <View style={styles.container}>
-            <Text style={styles.title}>Buscador de personajes</Text>
-            <TextInput style={styles.input} placeholder='Introduce un nombre' value={search} onChangeText={setSearch}/>
-            <Button title='Buscar' onPress={getDatos}/>
-            <View style={styles.container}>
-                <ScrollView style={styles.container}>{lista}</ScrollView>
-            </View>
-        </View>
-    )
-}
+        <SafeAreaView style={styles.contenedor}>
+            <KeyboardAvoidingView style={{ flex: 1 }} behavior={Platform.OS === "ios" ? "position" : ""}>
+                <View style={styles.contenedorImagen}>
+                    <Image style={styles.imagen} source={require('../assets/logo_twiBOT.png')} />
+                </View>
+                <ScrollView showsVerticalScrollIndicator={false} style={styles.contenedorScroll}>
+                    <Text style={styles.textoChat}>hoLA</Text>
 
+                </ScrollView>
+            </KeyboardAvoidingView>
+            <StatusBar style="auto" />
+        </SafeAreaView>
+    );
+};
 const styles = StyleSheet.create({
-    container: {
+    contenedor: {
         flex: 1,
-        padding: 8,
-    },
-    tarjeta: {
-        flex: 1,
-        flexDirection: 'column',
-        padding: 15,
+        backgroundColor: '#503484',
         alignItems: 'center',
-        borderBottomColor: 'gray',
-        borderBottomWidth: 1,
+        justifyContent: 'flex-start',
     },
-    input:{
-        borderBottomColor: 'gray',
-        borderBottomWidth: 2,
-        textAlign: 'center',
-        alignItems: 'center',
-        borderBottomColor: 'gray',
-        width: 200,
-        height: 30,
-        marginTop: 10,
-        marginLeft: 75,
-        fontStyle: 'italic',
-    },
-    title: {
-        marginTop: 15,
-        fontSize: 20,
-        fontWeight: 'bold',
-        textAlign: 'center',
-    },
-    nombre: {
-        marginTop: 15,
-        fontSize: 16,
-        fontWeight: 'bold',
-        textAlign: 'center',
-    },
-    especie: {
-        marginTop: 5,
-        fontSize: 16,
-        textAlign: 'center',
+    contenedorImagen: {
+        width: 60,
+        height: 60,
+        borderRadius: 20,
+        overflow: 'visible',
+        marginTop: 40,
+        //Properties to setup your Shadow 
+        shadowOffset: { width: 0, height: 4 },
+        shadowColor: 'black',
+        shadowOpacity: 0.3,
+        elevation: 10,
+        backgroundColor: "black",
+        alignSelf: 'center',
     },
     imagen: {
-        height: 130,
-        width: 130,
+        height: '100%',
+        width: '100%',
+        borderRadius: 20,
+    },
+    contenedorScroll: {
+        marginTop: 30,
+        width: 350,
+        backgroundColor: 'rgba(0, 0, 0, 0.5)',
+        marginBottom: 30,
         borderRadius: 10,
+    },
+    textoChat: {
+        color: 'white',
+        fontSize: 16,
+        paddingHorizontal: 15,
+        paddingVertical: 15,
     }
 });
-
 export default Pantalla3;
+
+
+

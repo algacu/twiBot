@@ -27,8 +27,8 @@ const App = () => {
             <MaterialCommunityIcons name="arrow-right" color={color} size={size} />
           ),
         }} />
-        <Tab.Screen name='API Rick y Morty' component={Pantalla3} options={{
-          tabBarLabel: 'Pantalla 3',
+        <Tab.Screen name='Chat del canal' component={Pantalla3} options={{
+          tabBarLabel: 'Chat',
           tabBarIcon: ({ color, size }) => (
             <MaterialCommunityIcons name="archive" color={color} size={size} />
           ),
