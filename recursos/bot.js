@@ -17,9 +17,6 @@ const client = new tmi.client(options);
 
 client.connect();
 
-
-
-
 client.on('connected', (address, port) => {
     client.action('neoalek', `¡Hola a todos! Conectado a ${address}:${port}`)
 

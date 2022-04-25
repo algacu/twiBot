@@ -5,7 +5,7 @@ const texto1 = "Convierte tu perfil de Twitch en un bot \n y modera fácilmente 
 const texto2 = "¡Configura tu propio bot en 3 pasos!"
 const textoBoton = "Comenzar"
 
-const Conexion1 = (props) => {
+const PantallaConexion1 = (props) => {
     return (
         <View style={styles.contenedor}>
             <View style={styles.contenedorImagen}>
@@ -17,7 +17,7 @@ const Conexion1 = (props) => {
                 <Text style={styles.texto2}>{texto2}</Text>
             </View>
             <View style={styles.contenedorBoton}>
-                <Pressable style={styles.boton} onPress={() => props.navigation.navigate('Conexion2')}>
+                <Pressable style={styles.boton} onPress={() => props.navigation.navigate('PantallaConexion2')}>
                     <Text style={styles.texto}>{textoBoton}</Text>
                 </Pressable>
             </View>
@@ -102,5 +102,5 @@ const styles = StyleSheet.create({
 
 
 });
-export default Conexion1;
+export default PantallaConexion1;
 

@@ -3,22 +3,23 @@ import * as React from 'react';
 import { useEffect, useState } from 'react';
 import { StyleSheet, ScrollView, Text, View, Image, Pressable, Linking, SafeAreaView, KeyboardAvoidingView } from 'react-native';
 import { TextInput } from 'react-native-gesture-handler';
+import global from './Global'
 
-
-const Conexion2 = (props) => {
+const PantallaConexion2 = (props) => {
 
     const texto1 = "Obtén tu token autentificador para \n hacer uso de los servicios de Twitch."
     const textoBotonObtenerToken = "Obtén tu token"
     const responseType = "token"
     const clientID = "0tsnjkv1fmhamkhkuwm9vuglxfmlfg"
-    const redirectUri = "https://twitchapps.com/tokengen/"
+    const redirectUri = "https://twitchapps.com/tmi/"
     const scope = "channel%3Amanage%3Apolls+channel%3Aread%3Apolls"
     const [estado, setEstado] = useState([]);
     const [token, setToken] = useState('');
     const [user, setUser] = useState('');
     const [uriToken, setUriToken] = useState('');
-    const textoBoton2 = "Atrás"
-    const inputUsuario = "Introduce tu usuario"
+    const inputUsuario = "Introduce tu usuario";
+    global.user = user;
+    global.token = token;
 
     useEffect(() => {
         generaEstado();
@@ -54,7 +55,7 @@ const Conexion2 = (props) => {
                         <Text style={styles.texto1}>{texto1}</Text>
                     </View>
                     <View style={styles.contenedorBoton1}>
-                        <Pressable style={styles.botonVerde} onPress={() => { Linking.openURL(uriToken) }}>
+                        <Pressable style={styles.botonVerde} onPress={() => { Linking.openURL('https://twitchapps.com/tmi/') }}>
                             <Text style={styles.texto}>{textoBotonObtenerToken}</Text>
                         </Pressable>
                     </View>
@@ -65,7 +66,7 @@ const Conexion2 = (props) => {
                         <TextInput style={styles.input} placeholder='Introduce tu usuario' value={user} onChangeText={setUser} />
                     </View>
                     <View style={styles.contenedorBoton2}>
-                        <Pressable style={styles.botonVerde} onPress={() => props.navigation.navigate('Conexion3')}>
+                        <Pressable style={styles.botonVerde} onPress={() => props.navigation.navigate('PantallaChat')}>
                             <Text style={styles.texto}>Siguiente</Text>
                         </Pressable>
                     </View>
@@ -206,7 +207,7 @@ const styles = StyleSheet.create({
     },
 
 });
-export default Conexion2;
+export default PantallaConexion2;
 
 
 

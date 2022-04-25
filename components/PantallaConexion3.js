@@ -5,7 +5,7 @@ import { StyleSheet, ScrollView, Text, View, Image, Pressable, Linking, SafeArea
 import { TextInput } from 'react-native-gesture-handler';
 
 
-const Conexion2 = (props) => {
+const PantallaConexion3 = (props) => {
 
     const texto1 = "Obtén tu token autentificador para \n hacer uso de los servicios de Twitch."
     const textoBotonObtenerToken = "Obtén tu token"
@@ -17,6 +17,7 @@ const Conexion2 = (props) => {
     const [token, setToken] = useState('');
     const [user, setUser] = useState('');
     const [uriToken, setUriToken] = useState('');
+    const textoBoton2 = "Atrás"
     const inputUsuario = "Introduce tu usuario"
 
     useEffect(() => {
@@ -64,7 +65,7 @@ const Conexion2 = (props) => {
                         <TextInput style={styles.input} placeholder='Introduce tu usuario' value={user} onChangeText={setUser} />
                     </View>
                     <View style={styles.contenedorBoton2}>
-                        <Pressable style={styles.botonVerde} onPress={() => props.navigation.navigate('Pantalla3')}>
+                        <Pressable style={styles.botonVerde} onPress={() => props.navigation.navigate('Conexion3')}>
                             <Text style={styles.texto}>Siguiente</Text>
                         </Pressable>
                     </View>
@@ -205,7 +206,7 @@ const styles = StyleSheet.create({
     },
 
 });
-export default Conexion2;
+export default PantallaConexion3;
 
 
 
