@@ -7,6 +7,9 @@ import { TextInput } from 'react-native-gesture-handler';
 
 const Pantalla3 = (props) => {
 
+    const tmi = require("tmi.js");
+    const { subscribers } = require("tmi.js/lib/commands");
+    const { badgeInfo, badges } = require("tmi.js/lib/parser");
 
     useEffect(() => {
 
