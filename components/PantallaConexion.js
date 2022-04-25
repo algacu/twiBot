@@ -1,16 +1,16 @@
 import * as React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
 import { StyleSheet } from 'react-native';
-import Stack1 from './Stack1';
-import Stack2 from './Stack2';
+import Conexion1 from './Conexion1';
+import Conexion2 from './Conexion2';
 
 const Stack = createStackNavigator();
 
-const Pantalla2 = () => {
+const PantallaConexion = () => {
     return (
         <Stack.Navigator options="false" >
-            <Stack.Screen name="Stack1" component={Stack1} options={{ headerShown: false }}/>
-            <Stack.Screen name="Stack2" component={Stack2} options={{ headerShown: false }}/>
+            <Stack.Screen name="Conexion1" component={Conexion1} options={{ headerShown: false }}/>
+            <Stack.Screen name="Conexion2" component={Conexion2} options={{ headerShown: false }}/>
         </Stack.Navigator>
     )
 }
@@ -29,4 +29,4 @@ const styles = StyleSheet.create({
     }
 });
 
-export default Pantalla2
+export default PantallaConexion
