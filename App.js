@@ -33,7 +33,7 @@ const App = () => {
             <MaterialCommunityIcons name="archive" color={color} size={size} />
           ),
         }} />
-        <Tab.Screen name='API Países' component={Pantalla4} options={{
+        <Tab.Screen name='Chat' component={Pantalla4} options={{
           tabBarLabel: 'Pantalla 4',
           tabBarIcon: ({ color, size }) => (
             <MaterialCommunityIcons name="archive" color={color} size={size} />

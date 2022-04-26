@@ -41,6 +41,8 @@ const PantallaChat = (props) => {
             
                 let comando = message.trim(); //Limpiamos los espacios en la cadena de texto del mensaje.
                 comando = comando.toLowerCase();
+
+                setTexto(context['display-name'] + ': ' + message)
             
                 if (comando === '!hello'){
                     // client.say(target, `¡Bienvenido ${context["display-name"]}! Llevas suscrito ${context["badge-info"].subscriber} meses`);
