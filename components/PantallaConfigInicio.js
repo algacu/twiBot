@@ -1,28 +1,31 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View, Image, Pressable } from 'react-native';
+import { StyleSheet, Text, View, Image, SafeAreaView, Pressable } from 'react-native';
+import global from './Global'
 
-const texto1 = "Convierte tu perfil de Twitch en un bot \n y modera fácilmente tus streams."
-const texto2 = "¡Configura tu propio bot en 3 pasos!"
-const textoBoton = "Comenzar"
+const logo = '../assets/logo_twiBOT.png'
+const titulo = 'Tú mandas'
+const texto1 = 'Convierte tu perfil de Twitch en un bot \n y modera fácilmente tus streams.'
+const texto2 = '¡Configura tu propio bot en 3 pasos!'
+const textoBotonSiguiente = 'Comenzar'
 
-const PantallaConexion1 = (props) => {
+const PantallaConfigInicio = (props) => {
     return (
-        <View style={styles.contenedor}>
+        <SafeAreaView style={styles.contenedor}>
             <View style={styles.contenedorImagen}>
-                <Image style={styles.imagen} source={require('../assets/logo_twiBOT.png')} />
+                <Image style={styles.imagen} source={require(logo)} />
             </View>
             <View style={styles.contenedorTexto}>
-                <Text style={styles.titulo}>Tú mandas.</Text>
+                <Text style={styles.titulo}>{titulo}</Text>
                 <Text style={styles.texto1}>{texto1}</Text>
                 <Text style={styles.texto2}>{texto2}</Text>
             </View>
             <View style={styles.contenedorBoton}>
-                <Pressable style={styles.boton} onPress={() => props.navigation.navigate('PantallaConexion2')}>
-                    <Text style={styles.texto}>{textoBoton}</Text>
+                <Pressable style={styles.botonVerde} onPress={() => props.navigation.navigate('PantallaConfigPaso1')}>
+                    <Text style={styles.texto}>{textoBotonSiguiente}</Text>
                 </Pressable>
             </View>
-            <StatusBar style="auto" />
-        </View>
+            <StatusBar style="light" />
+        </SafeAreaView>
     );
 };
 const styles = StyleSheet.create({
@@ -38,7 +41,6 @@ const styles = StyleSheet.create({
         borderRadius: 20,
         overflow: 'visible',
         marginTop: 150,
-        //Properties to setup your Shadow 
         shadowOffset: { width: 0, height: 4 },
         shadowColor: 'black',
         shadowOpacity: 0.3,
@@ -83,24 +85,22 @@ const styles = StyleSheet.create({
         textAlign: 'center',
     },
     contenedorBoton: {
-        marginTop: 15,
+        marginTop: 20,
         shadowOffset: { width: 0, height: 4 },
         shadowColor: 'black',
         shadowOpacity: 0.3,
         elevation: 10,
-        backgroundColor: "black"
     },
-    boton: {
+    botonVerde: {
         alignItems: 'center',
         justifyContent: 'center',
-        paddingVertical: 12,
-        paddingHorizontal: 32,
+        flexDirection: 'row',
+        paddingVertical: 10,
+        paddingHorizontal: 20,
         borderRadius: 4,
         elevation: 3,
         backgroundColor: '#85AD3A',
-    }
-
-
+    },
 });
-export default PantallaConexion1;
+export default PantallaConfigInicio;
 

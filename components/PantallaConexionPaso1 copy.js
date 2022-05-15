@@ -3,11 +3,12 @@ import * as React from 'react';
 import { useEffect, useState } from 'react';
 import { StyleSheet, ScrollView, Text, View, Image, Pressable, Linking, SafeAreaView, KeyboardAvoidingView } from 'react-native';
 import { TextInput } from 'react-native-gesture-handler';
+import global from './Global'
 
+const PantallaConexionPaso1 = (props) => {
 
-const PantallaConexion3 = (props) => {
-
-    const texto1 = "Obtén tu token autentificador para \n hacer uso de los servicios de Twitch."
+    const titulo = "Paso 1"
+    const subtitulo = "Obtén tu token autentificador para \n hacer uso de los servicios de Twitch"
     const textoBotonObtenerToken = "Obtén tu token"
     const responseType = "token"
     const clientID = "0tsnjkv1fmhamkhkuwm9vuglxfmlfg"
@@ -17,8 +18,9 @@ const PantallaConexion3 = (props) => {
     const [token, setToken] = useState('');
     const [user, setUser] = useState('');
     const [uriToken, setUriToken] = useState('');
-    const textoBoton2 = "Atrás"
-    const inputUsuario = "Introduce tu usuario"
+    const inputUsuario = "Introduce tu usuario";
+    global.user = user;
+    global.token = token;
 
     useEffect(() => {
         generaEstado();
@@ -44,18 +46,29 @@ const PantallaConexion3 = (props) => {
 
     return (
         <SafeAreaView style={styles.contenedor}>
-            <KeyboardAvoidingView style={{ flex: 1 }} behavior={Platform.OS === "ios" ? "position": ""}>
+            <KeyboardAvoidingView style={{ flex: 1 }} behavior={Platform.OS === "ios" ? "position" : ""}>
                 <ScrollView showsVerticalScrollIndicator={false}>
-                    <View style={styles.contenedorImagen}>
-                        <Image style={styles.imagen} source={require('../assets/logo_twiBOT.png')} />
+                    <View style={styles.contenedorLogo}>
+                        <Image style={styles.logo} source={require('../assets/logo_twiBOT.png')} />
                     </View>
                     <View style={styles.contenedorTexto}>
-                        <Text style={styles.titulo}>Paso 1</Text>
-                        <Text style={styles.texto1}>{texto1}</Text>
+                        <Text style={styles.titulo}>{titulo}</Text>
+                        <Text style={styles.subtitulo}>{subtitulo}</Text>
                     </View>
-                    <View style={styles.contenedorBoton1}>
-                        <Pressable style={styles.botonVerde} onPress={() => { Linking.openURL(uriToken) }}>
-                            <Text style={styles.texto}>{textoBotonObtenerToken}</Text>
+                    <View style={styles.contenedorBotonToken}>
+                        <Pressable style={({ pressed }) => [
+                            {
+                                opacity: pressed ? 0.5 : 1.0, alignItems: 'center',
+                                justifyContent: 'center',
+                                paddingVertical: 12,
+                                paddingHorizontal: 32,
+                                borderRadius: 4,
+                                elevation: 3,
+                                backgroundColor: '#85AD3A',
+                            }
+                        ]}
+                            onPress={() => { Linking.openURL('https://twitchapps.com/tmi/') }}>
+                            <Text style={styles.textoBoton}>{textoBotonObtenerToken}</Text>
                         </Pressable>
                     </View>
                     <View style={styles.contenedorInput}>
@@ -64,17 +77,46 @@ const PantallaConexion3 = (props) => {
                         <Text style={styles.textoInput}>{inputUsuario}</Text>
                         <TextInput style={styles.input} placeholder='Introduce tu usuario' value={user} onChangeText={setUser} />
                     </View>
-                    <View style={styles.contenedorBoton2}>
-                        <Pressable style={styles.botonVerde} onPress={() => props.navigation.navigate('Conexion3')}>
-                            <Text style={styles.texto}>Siguiente</Text>
+
+                    <View style={styles.contenedorBotonSiguiente}>
+
+                        <Pressable style={({ pressed }) => [
+                            {
+                                opacity: pressed ? 0.5 : 1.0, alignItems: 'center',
+                                justifyContent: 'center',
+                                paddingVertical: 12,
+                                paddingHorizontal: 32,
+                                borderRadius: 4,
+                                elevation: 3,
+                                backgroundColor: '#85AD3A',
+                            }
+                        ]}
+                            onPress={() => props.navigation.navigate('PantallaConexionPaso2')}>
+
+                            <Text style={styles.textoBoton}>Siguiente</Text>
                         </Pressable>
+
                     </View>
-                    <View style={styles.contenedorBoton3}>
-                        <Pressable style={styles.botonGris} onPress={() => props.navigation.navigate('Conexion1')}>
-                            <Text style={styles.texto}>Atrás</Text>
+                    <View style={styles.contenedorBotonAtras}>
+
+                        <Pressable style={({ pressed }) => [
+                            {
+                                opacity: pressed ? 0.5 : 1.0, alignItems: 'center',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                paddingVertical: 12,
+                                paddingHorizontal: 32,
+                                borderRadius: 4,
+                                elevation: 3,
+                                backgroundColor: '#A0A0A0',
+                            }
+                        ]}
+                            onPress={() => props.navigation.navigate('PantallaConexionPaso0')}>
+                            <Text style={styles.textoBoton}>Atrás</Text>
                         </Pressable>
+
                     </View>
-                    <StatusBar style="auto" />
+                    <StatusBar style="light" />
                 </ScrollView>
             </KeyboardAvoidingView>
         </SafeAreaView>
@@ -84,15 +126,14 @@ const styles = StyleSheet.create({
     contenedor: {
         flex: 1,
         backgroundColor: '#503484',
-        alignItems: 'center',
         justifyContent: 'flex-start',
     },
-    contenedorImagen: {
+    contenedorLogo: {
         width: 80,
         height: 80,
         borderRadius: 20,
         overflow: 'visible',
-        marginTop: 60,
+        marginTop: 30,
         //Properties to setup your Shadow 
         shadowOffset: { width: 0, height: 4 },
         shadowColor: 'black',
@@ -101,7 +142,7 @@ const styles = StyleSheet.create({
         backgroundColor: "black",
         alignSelf: 'center',
     },
-    imagen: {
+    logo: {
         height: '100%',
         width: '100%',
         borderRadius: 20,
@@ -117,14 +158,14 @@ const styles = StyleSheet.create({
         color: 'white',
         textAlign: 'center',
     },
-    texto: {
+    textoBoton: {
         fontSize: 16.5,
         lineHeight: 21,
         fontWeight: 'bold',
         letterSpacing: 0.25,
         color: 'white',
     },
-    texto1: {
+    subtitulo: {
         marginTop: 5,
         lineHeight: 25,
         fontSize: 20,
@@ -132,14 +173,9 @@ const styles = StyleSheet.create({
         textAlign: 'center',
     },
     textoInput: {
-        marginTop: 5,
+        marginTop: 10,
         lineHeight: 15,
         fontSize: 15,
-        color: 'white',
-        textAlign: 'center',
-    },
-    textoInput2: {
-        fontSize: 12,
         color: 'white',
         textAlign: 'center',
     },
@@ -147,7 +183,7 @@ const styles = StyleSheet.create({
         marginTop: 20,
         alignSelf: 'center',
     },
-    contenedorBoton1: {
+    contenedorBotonToken: {
         marginTop: 20,
         shadowOffset: { width: 0, height: 4 },
         shadowColor: 'black',
@@ -156,8 +192,8 @@ const styles = StyleSheet.create({
         backgroundColor: "black",
         alignSelf: 'center',
     },
-    contenedorBoton2: {
-        marginTop: 30,
+    contenedorBotonSiguiente: {
+        marginTop: 45,
         shadowOffset: { width: 0, height: 4 },
         shadowColor: 'black',
         shadowOpacity: 0.3,
@@ -165,7 +201,7 @@ const styles = StyleSheet.create({
         backgroundColor: "black",
         alignSelf: 'center',
     },
-    contenedorBoton3: {
+    contenedorBotonAtras: {
         marginTop: 10,
         shadowOffset: { width: 0, height: 4 },
         shadowColor: 'black',
@@ -173,24 +209,6 @@ const styles = StyleSheet.create({
         elevation: 10,
         backgroundColor: "black",
         alignSelf: 'center',
-    },
-    botonVerde: {
-        alignItems: 'center',
-        justifyContent: 'center',
-        paddingVertical: 12,
-        paddingHorizontal: 32,
-        borderRadius: 4,
-        elevation: 3,
-        backgroundColor: '#85AD3A',
-    },
-    botonGris: {
-        alignItems: 'center',
-        justifyContent: 'center',
-        paddingVertical: 12,
-        paddingHorizontal: 32,
-        borderRadius: 4,
-        elevation: 3,
-        backgroundColor: '#A0A0A0',
     },
     input: {
         backgroundColor: 'white',
@@ -206,7 +224,7 @@ const styles = StyleSheet.create({
     },
 
 });
-export default PantallaConexion3;
+export default PantallaConexionPaso1;
 
 
 

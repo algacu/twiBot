@@ -12,6 +12,11 @@ const PantallaChat = (props) => {
     const { badgeInfo, badges } = require("tmi.js/lib/parser");
     const [texto, setTexto] = useState('');
 
+
+    let mensajes = [];
+    const listaMensajes = [];
+
+
     const options = {
         options: {
             debug: true,
@@ -31,30 +36,40 @@ const PantallaChat = (props) => {
 
             client.on('connected', (address, port) => {
                 client.action('neoalek', `¡Hola a todos! Conectado a ${address}:${port}`)
-            
+
             })
-            
+
             client.on('chat', (target, context, message, self) => {
                 if (self) return; //Si el mensaje viene por parte del bot, return (para no entrar en bucle).
-            
+
                 //ANALIZAR EL CONTEXTO (función para controlar datos context)
-            
+
                 let comando = message.trim(); //Limpiamos los espacios en la cadena de texto del mensaje.
                 comando = comando.toLowerCase();
 
-                setTexto(context['display-name'] + ': ' + message)
-            
-                if (comando === '!hello'){
+                mensajes.push("\n" + context['display-name'] + ': ' + message);
+
+                alert(mensajes[0]);
+
+                listaMensajes = mensajes.map((mensaje) => (
+                    <View>
+                        <Text>{mensaje.text}</Text>
+                    </View>
+                ));
+
+                //setTexto(context['display-name'] + ': ' + message)
+
+                if (comando === '!hello') {
                     // client.say(target, `¡Bienvenido ${context["display-name"]}! Llevas suscrito ${context["badge-info"].subscriber} meses`);
                     client.say(target, `¡Bienvenido ${context["display-name"]}!`);
-                }else if (comando == '!caca'){
+                } else if (comando == '!caca') {
                     client.say(target, `VAYA VAYA, CONQUE TE GUSTA HACER POPÓ ${context["display-name"]}`);
                     console.log(context);
-                }else if (comando == '!ruleta'){
+                } else if (comando == '!ruleta') {
                     const sides = 6;
                     let numero = Math.floor(Math.random() * sides) + 1;
-            
-                    if (numero >= 7){
+
+                    if (numero >= 7) {
                         client.say(target, `Has sacado ${numero}. Te has salvado ${context["display-name"]}`);
                     } else {
                         //client.action(target, `/timeout ${username} 10`)
@@ -63,9 +78,9 @@ const PantallaChat = (props) => {
                         client.getOptions()
                     }
                 }
-                
+
             })
-            
+
         } catch (error) {
             alert(error);
         }
@@ -79,7 +94,7 @@ const PantallaChat = (props) => {
                     <Button title="conecta" onPress={() => conectaChat()}></Button>
                 </View>
                 <ScrollView showsVerticalScrollIndicator={false} style={styles.contenedorScroll}>
-                    <Text style={styles.textoChat}>{texto}</Text>
+                    {listaMensajes}
                 </ScrollView>
             </KeyboardAvoidingView>
             <StatusBar style="auto" />
