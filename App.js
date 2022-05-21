@@ -4,7 +4,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
 import PantallaConfigIndex from './components/PantallaConfigIndex';
-import Pantalla4 from './components/PantallaChat';
+import Pantalla4 from './components/Pantalla4';
 import global from './components/Global';
 
 import { StatusBar } from 'react-native';
@@ -22,7 +22,7 @@ const App = () => {
     <NavigationContainer>
       <StatusBar barStyle="light-content" />
       <Tab.Navigator
-        initialRouteName="Configuracion"
+        initialRouteName="Chat"
         screenOptions={{
           "tabBarActiveTintColor": "#503484",
           "tabBarInactiveTintColor": "gray",

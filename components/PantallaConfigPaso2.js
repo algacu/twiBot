@@ -3,7 +3,7 @@ import * as React from 'react';
 import { useEffect, useState } from 'react';
 import { StyleSheet, ScrollView, Text, Icon, View, Image, Pressable, SafeAreaView, KeyboardAvoidingView, Switch } from 'react-native';
 import { TextInput } from 'react-native-gesture-handler';
-import global from './Global'
+import global from './Global';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import { useNavigation } from '@react-navigation/native';
 
@@ -24,6 +24,8 @@ const PantallaConfigPaso2 = (props) => {
 
     const [palabrasSecretas, setPalabrasSecretas] = useState(global.palabrasSecretas);
     const [palabrasCensuradas, setPalabrasCensuradas] = useState(global.palabrasCensuradas);
+
+    const navigation = useNavigation();
 
     // useEffect(() => {
     //     global.palabrasSecretas = convierteStringArray(palabrasSecretas);
@@ -63,9 +65,20 @@ const PantallaConfigPaso2 = (props) => {
                     </View>
                     <View style={styles.contenedorInput}>
                         <Text style={styles.textoInput}>{inputPalabrasSecretas}</Text>
-                        <TextInput style={styles.input} value={palabrasSecretas} onChangeText={setPalabrasSecretas} />
+                        <View flexDirection='row'>
+                            <TextInput style={styles.input} value={palabrasSecretas} onChangeText={setPalabrasSecretas} />
+                            <Pressable style={styles.botonAyuda} onPress={() => navigation.navigate('PantallaAyudaPalabrasSecretas')}>
+                                <MaterialCommunityIcons name="help" color={'white'} size={20} />
+                            </Pressable>
+                        </View>
                         <Text style={styles.textoInput}>{inputPalabrasCensuradas}</Text>
+                        
+                        <View flexDirection='row'>
                         <TextInput style={styles.input} value={palabrasCensuradas} onChangeText={setPalabrasCensuradas} />
+                            <Pressable style={styles.botonAyuda} onPress={() => navigation.navigate('PantallaAyudaPalabrasCensuradas')}>
+                                <MaterialCommunityIcons name="help" color={'white'} size={20} />
+                            </Pressable>
+                        </View>
                     </View>
                     <View style={styles.contenedorTexto2}>
                         <Text style={styles.textoInput}>{toggleSwitch1Texto}</Text>
@@ -78,23 +91,25 @@ const PantallaConfigPaso2 = (props) => {
                             onValueChange={toggleSwitch1}
                             value={isEnabledSwitch1}
                         />
+                        <Pressable style={styles.botonAyuda2} onPress={() => navigation.navigate('PantallaAyudaDados')}>
+                                <MaterialCommunityIcons name="help" color={'white'} size={16} />
+                            </Pressable>
                     </View>
-                    <View style={styles.contenedorBoton2}>
-                        <Pressable style={styles.botonAyuda} onPress={() => navigation.navigate('PantallaModal')}>
-                            <MaterialCommunityIcons name="help" color={'white'} size={20} />
+                    {/* <View style={styles.contenedorBoton2}>
+                        <Pressable style={styles.botonAyuda} onPress={() => navigation.navigate('PantallaAyuda')}>
+                            <MaterialCommunityIcons name="help" color={'white'} size={14} />
                         </Pressable>
-                    </View>
-                    <View style={styles.contenedorBoton3}>
+                    </View> */}
+                    <View style={styles.contenedorBotonSiguiente}>
                         <Pressable style={styles.botonVerde} onPress={() => { guardaVariablesGlobales(); props.navigation.navigate('PantallaConfigPaso3'); }}>
                             <Text style={styles.texto}>{textoBotonSiguiente}</Text>
                         </Pressable>
                     </View>
-                    <View style={styles.contenedorBoton3}>
+                    <View style={styles.contenedorBotonAtras}>
                         <Pressable style={styles.botonGris} onPress={() => props.navigation.navigate('PantallaConfigPaso1')}>
                             <Text style={styles.texto}>{textoBotonAtras}</Text>
                         </Pressable>
                     </View>
-                    <StatusBar style="light" />
                 </ScrollView>
             </KeyboardAvoidingView>
         </SafeAreaView>
@@ -169,6 +184,7 @@ const styles = StyleSheet.create({
     contenedorSwitch: {
         marginTop: 10,
         alignSelf: 'center',
+        flexDirection: 'row'
     },
     contenedorBoton2: {
         marginTop: 30,
@@ -188,13 +204,37 @@ const styles = StyleSheet.create({
         alignSelf: 'center',
     },
     botonAyuda: {
+        // alignItems: 'center',
+        // justifyContent: 'center',
+        // paddingVertical: 8,
+        // paddingHorizontal: 10,
+        // borderRadius: 4,
+        // elevation: 3,
+        // backgroundColor: '#A0A0A0',
+        backgroundColor: 'rgba(255, 255, 255, 0.3)',
+        textAlign: 'center',
         alignItems: 'center',
-        justifyContent: 'center',
-        paddingVertical: 8,
-        paddingHorizontal: 10,
-        borderRadius: 4,
-        elevation: 3,
-        backgroundColor: '#A0A0A0',
+        borderBottomColor: 'gray',
+        width: 25,
+        height: 30,
+        borderRadius: 5,
+        marginTop: 10,
+        marginLeft: 5,
+        paddingVertical: 5,
+        paddingHorizontal: 2,
+    },
+    botonAyuda2: {
+        backgroundColor: 'rgba(255, 255, 255, 0.3)',
+        textAlign: 'center',
+        alignItems: 'center',
+        borderBottomColor: 'gray',
+        width: 25,
+        height: 25,
+        borderRadius: 5,
+        marginLeft: 5,
+        paddingVertical: 3,
+        paddingHorizontal: 2,
+        marginTop:3,
     },
     botonVerde: {
         alignItems: 'center',
@@ -217,7 +257,7 @@ const styles = StyleSheet.create({
         backgroundColor: '#A0A0A0',
     },
     input: {
-        backgroundColor: 'white',
+        backgroundColor: 'rgba(255, 255, 255, 0.77)',
         borderBottomColor: 'gray',
         borderBottomWidth: 2,
         textAlign: 'center',
@@ -227,8 +267,25 @@ const styles = StyleSheet.create({
         height: 35,
         marginTop: 8,
         marginBottom: 8,
+        borderRadius: 5,
+        padding: 5,
     },
-
+    contenedorBotonSiguiente: {
+        marginTop: 93,
+        shadowOffset: { width: 0, height: 4 },
+        shadowColor: 'black',
+        shadowOpacity: 0.3,
+        elevation: 10,
+        alignSelf: 'center',
+    },
+    contenedorBotonAtras: {
+        marginTop: 10,
+        shadowOffset: { width: 0, height: 4 },
+        shadowColor: 'black',
+        shadowOpacity: 0.3,
+        elevation: 10,
+        alignSelf: 'center',
+    }
 });
 export default PantallaConfigPaso2;
 

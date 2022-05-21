@@ -71,7 +71,6 @@ const PantallaConfigPaso1 = (props) => {
                             <Text style={styles.texto}>{textoBotonAtras}</Text>
                         </Pressable>
                     </View>
-                    <StatusBar style="light" />
                 </ScrollView>
             </KeyboardAvoidingView>
         </SafeAreaView>
@@ -147,7 +146,7 @@ const styles = StyleSheet.create({
         alignSelf: 'center',
     },
     contenedorBotonSiguiente: {
-        marginTop: 45,
+        marginTop: 65,
         shadowOffset: { width: 0, height: 4 },
         shadowColor: 'black',
         shadowOpacity: 0.3,
@@ -163,16 +162,17 @@ const styles = StyleSheet.create({
         alignSelf: 'center',
     },
     input: {
-        backgroundColor: 'white',
+        backgroundColor: 'rgba(255, 255, 255, 0.77)',
         borderBottomColor: 'gray',
         borderBottomWidth: 2,
         textAlign: 'center',
         alignItems: 'center',
         borderBottomColor: 'gray',
-        width: 220,
-        height: 40,
+        width: 200,
+        height: 35,
         marginTop: 8,
         marginBottom: 8,
+        borderRadius: 5,
         padding: 5,
     },
     botonVerde: {

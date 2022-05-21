@@ -24,7 +24,6 @@ const PantallaConfigInicio = (props) => {
                     <Text style={styles.texto}>{textoBotonSiguiente}</Text>
                 </Pressable>
             </View>
-            <StatusBar style="light" />
         </SafeAreaView>
     );
 };

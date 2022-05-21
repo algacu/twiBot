@@ -5,6 +5,7 @@ import { StyleSheet, ScrollView, Text, View, Image, Pressable, SafeAreaView, Key
 import { TextInput } from 'react-native-gesture-handler';
 import global from './Global'
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import { conectar } from '../utils/Conectar';
 
 const PantallaConfigPaso3 = (props) => {
 
@@ -14,10 +15,10 @@ const PantallaConfigPaso3 = (props) => {
 
     const textoUsuario = 'Usuario actual:';
     const textoCanal = 'Canal:';
-    const textoToken = 'Token:';
+    const textoToken = 'Chat Token:';
     const textoPalabrasSecretas = '  Palabras secretas';
     const textoPalabrasCensuradas = '  Palabras censuradas';
-    const textoBotonSiguiente = 'Conectar';
+    const textoBotonConectar = 'Conectar';
     const textoBotonAtras = 'Atrás';
 
     const user = global.user;
@@ -25,6 +26,16 @@ const PantallaConfigPaso3 = (props) => {
     const canal = global.user;
     const palabrasSecretas = global.palabrasSecretas;
     const palabrasCensuradas = global.palabrasCensuradas;
+    const [tokenOK, setTokenOK] = useState('');
+
+    useEffect(() => {
+        var longitudToken = token.length;
+        if (longitudToken > 0){
+            setTokenOK('comment-check')
+        } else {
+            setTokenOK('comment-remove')
+        }
+    }, [])
 
     return (
         <SafeAreaView style={styles.contenedor}>
@@ -41,7 +52,7 @@ const PantallaConfigPaso3 = (props) => {
                         <Text style={styles.textoInput}>{textoUsuario}</Text>
                         <Text style={styles.subtitulo}>{user}</Text>
                         <Text style={styles.textoInput}>{textoToken}</Text>
-                        <Text style={styles.subtitulo}>{token}</Text>
+                        <MaterialCommunityIcons style={styles.subtitulo} name={tokenOK} color={'white'} size={20}/>
                     </View>
                     <View style={styles.contenedorBoton}>
                         <Pressable style={styles.botonGris} onPress={() => Alert.alert('Palabras Secretas', palabrasSecretas)}>
@@ -54,8 +65,8 @@ const PantallaConfigPaso3 = (props) => {
                         </Pressable>
                     </View>
                     <View style={styles.contenedorBoton}>
-                        <Pressable style={styles.botonVerde} onPress={() => props.navigation.navigate('PantallaConfigPaso3')}>
-                            <Text style={styles.textoBoton}>{textoBotonSiguiente}</Text>
+                        <Pressable style={styles.botonVerde} onPress={() => conectar(user, token)}>
+                            <Text style={styles.textoBoton}>{textoBotonConectar}</Text>
                         </Pressable>
                     </View>
                     <View style={styles.contenedorBoton}>
@@ -63,7 +74,6 @@ const PantallaConfigPaso3 = (props) => {
                             <Text style={styles.textoBoton}>{textoBotonAtras}</Text>
                         </Pressable>
                     </View>
-                    <StatusBar style="light" />
                 </ScrollView>
             </KeyboardAvoidingView>
         </SafeAreaView>
@@ -129,6 +139,7 @@ const styles = StyleSheet.create({
     contenedorInfo: {
         marginTop: 20,
         alignSelf: 'center',
+        alignItems: 'center',
         marginBottom: 20,
     },
     contenedorBoton: {
@@ -147,7 +158,7 @@ const styles = StyleSheet.create({
         borderRadius: 4,
         elevation: 3,
         backgroundColor: '#85AD3A',
-        marginTop: 50,
+        marginTop: 55,
     },
     botonGris: {
         alignItems: 'center',
