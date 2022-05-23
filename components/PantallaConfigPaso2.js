@@ -1,4 +1,3 @@
-import { StatusBar } from 'expo-status-bar';
 import * as React from 'react';
 import { useEffect, useState } from 'react';
 import { StyleSheet, ScrollView, Text, Icon, View, Image, Pressable, SafeAreaView, KeyboardAvoidingView, Switch } from 'react-native';
@@ -204,13 +203,6 @@ const styles = StyleSheet.create({
         alignSelf: 'center',
     },
     botonAyuda: {
-        // alignItems: 'center',
-        // justifyContent: 'center',
-        // paddingVertical: 8,
-        // paddingHorizontal: 10,
-        // borderRadius: 4,
-        // elevation: 3,
-        // backgroundColor: '#A0A0A0',
         backgroundColor: 'rgba(255, 255, 255, 0.3)',
         textAlign: 'center',
         alignItems: 'center',
