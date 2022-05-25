@@ -5,5 +5,6 @@ export default {
     palabrasCensuradas: '',
     palabrasSecretas: '',
     dados: false,
+    email: '',
 };
 

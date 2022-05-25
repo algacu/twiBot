@@ -39,10 +39,12 @@ const PantallaUsuarioLogin = (props) => {
 
     // }
 
-    const setData = async (user) => {
-        await setDoc(doc(db, 'usuarios', user), {
+    const setData = async (userCredential) => {
+        const email = userCredential.user.email;
+        await setDoc(doc(db, 'usuarios', email), {
             usuario: '',
             token: '',
+            email: email,
             palabrasSecretas: '',
             palabrasCensuradas: '',
             dados: false
@@ -62,6 +64,7 @@ const PantallaUsuarioLogin = (props) => {
             global.palabrasCensuradas = data.palabrasCensuradas;
             global.palabrasSecretas = data.palabrasSecretas;
             global.dados = data.dados;
+            global.email = data.email;
         } else {
             // doc.data() will be undefined in this case
             console.log("¡No se ha encontrado al usuario en la BD!");
@@ -84,7 +87,7 @@ const PantallaUsuarioLogin = (props) => {
                 console.log('Cuenta creada', 'Email: ' + email);
                 Alert.alert('Cuenta creada', 'Email: ' + email);
                 console.log(email);
-                setData(email);
+                setData(userCredential);
                 navigation.replace('PantallaUsuarioLoginOk');
             })
             .catch(error => {
@@ -94,6 +97,8 @@ const PantallaUsuarioLogin = (props) => {
                     stringError = "El email introducido ya está en uso.";
                 } else if (error.code === "auth/weak-password") {
                     stringError = "La contraseña debe tener al menos 6 caracteres."
+                } else if (error.code === "auth/invalid-email") {
+                    stringError = "El email introducido no es válido."
                 }
                 else {
                     stringError = error.message;
@@ -109,6 +114,7 @@ const PantallaUsuarioLogin = (props) => {
                 console.log('Logueado', 'Email: ' + email);
                 Alert.alert('Logueado', 'Email: ' + email);
                 console.log(email);
+                console.log(userCredential.user)
                 getData(email)
                 navigation.replace('PantallaUsuarioLoginOk');
             })
