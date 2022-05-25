@@ -15,8 +15,8 @@ const PantallaUsuarioLogin = (props) => {
     const titulo = 'Tú mandas'
     const texto1 = 'Convierte tu perfil de Twitch en un bot \n y modera fácilmente tus streams'
     const texto2 = '¡Configura tu propio bot en 3 pasos!'
-    const textoBotonLogin = 'Login'
-    const textoCrearCuenta = 'Crear Cuenta'
+    const textoBotonLogin = 'Comenzar'
+    const textoCrearCuenta = 'Registrarse'
     const textoEmail = 'Correo electrónico'
     const textoContrasenya = 'Contraseña'
 
@@ -150,8 +150,8 @@ const PantallaUsuarioLogin = (props) => {
                 <Pressable style={styles.botonVerde} onPress={handleSignIn}>
                     <Text style={styles.texto}>{textoBotonLogin}</Text>
                 </Pressable>
-                <Pressable style={styles.botonVerdeOscuro} onPress={handleCreateAccount}>
-                    <Text style={styles.texto}>{textoCrearCuenta}</Text>
+                <Pressable onPress={handleCreateAccount}>
+                    <Text style={styles.texto3}>{textoCrearCuenta}</Text>
                 </Pressable>
             </View>
         </SafeAreaView>
@@ -198,6 +198,7 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         letterSpacing: 0.25,
         color: 'white',
+        textAlign: 'center',
     },
     texto1: {
         marginTop: 5,
@@ -212,6 +213,14 @@ const styles = StyleSheet.create({
         fontSize: 19,
         color: 'white',
         textAlign: 'center',
+    },
+    texto3: {
+        marginTop: 15,
+        lineHeight: 15,
+        fontSize: 14,
+        color: '#e0e0e0',
+        textAlign: 'center',
+        textDecorationLine: 'underline',
     },
     contenedorInput: {
         marginTop: 20,
@@ -250,23 +259,12 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         flexDirection: 'row',
         paddingVertical: 10,
-        paddingHorizontal: 20,
+        paddingHorizontal: 15,
         borderRadius: 4,
         elevation: 3,
         backgroundColor: '#85AD3A',
         marginTop: 15,
-    },
-    botonVerdeOscuro: {
-        alignItems: 'center',
-        justifyContent: 'center',
-        flexDirection: 'row',
-        paddingVertical: 10,
-        paddingHorizontal: 20,
-        borderRadius: 4,
-        elevation: 3,
-        backgroundColor: '#A0A0A0',
-        marginTop: 15,
-    },
+    }
 });
 export default PantallaUsuarioLogin;
 
