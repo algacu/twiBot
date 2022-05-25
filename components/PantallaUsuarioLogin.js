@@ -3,8 +3,9 @@ import { useEffect, useState } from 'react';
 import { StyleSheet, Text, View, Image, SafeAreaView, Pressable, TextInput, Alert } from 'react-native';
 import global from './Global'
 
-import { auth } from '../firebase';
+import { auth, db } from '../firebase';
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from 'firebase/auth';
+import { collection, getDocs, getDoc, doc, setDoc } from 'firebase/firestore';
 
 import { useNavigation } from '@react-navigation/native';
 
@@ -24,6 +25,49 @@ const PantallaUsuarioLogin = (props) => {
 
     const navigation = useNavigation();
 
+
+    // async function getCities(db) {
+    //     const citiesCol = collection(db, 'cities');
+    //     const citySnapshot = await getDocs(citiesCol);
+    //     const cityList = citySnapshot.docs.map(doc => doc.data());
+    //     return cityList;
+    // }
+
+    // const getData = async (user) => {
+    //     const dbUsuarios = collection(db, 'usuarios');
+    //     const dbUsuario = await getDocs(user);
+
+    // }
+
+    const setData = async (user) => {
+        await setDoc(doc(db, 'usuarios', user), {
+            usuario: '',
+            token: '',
+            palabrasSecretas: '',
+            palabrasCensuradas: '',
+            dados: false
+        });
+    }
+
+    const getData = async (user) => {
+        const docRef = doc(db, 'usuarios', user);
+        const docSnap = await getDoc(docRef);
+
+        if (docSnap.exists()) {
+            console.log("Document data:", docSnap.data());
+            //const string = JSON.stringify(docSnap.data());
+            const data = docSnap.data();
+            global.user = data.usuario;
+            global.token = data.token;
+            global.palabrasCensuradas = data.palabrasCensuradas;
+            global.palabrasSecretas = data.palabrasSecretas;
+            global.dados = data.dados;
+        } else {
+            // doc.data() will be undefined in this case
+            console.log("¡No se ha encontrado al usuario en la BD!");
+        }
+    }
+
     useEffect(() => {
         const unsuscribe = auth.onAuthStateChanged(user => {
             if (user) {
@@ -36,11 +80,11 @@ const PantallaUsuarioLogin = (props) => {
     const handleCreateAccount = () => {
         createUserWithEmailAndPassword(auth, email, password)
             .then((userCredential) => {
-                const user = userCredential.user;
-                const email = user.email;
+                const email = userCredential.user.email;
                 console.log('Cuenta creada', 'Email: ' + email);
                 Alert.alert('Cuenta creada', 'Email: ' + email);
-                console.log(user);
+                console.log(email);
+                setData(email);
                 navigation.replace('PantallaUsuarioLoginOk');
             })
             .catch(error => {
@@ -61,10 +105,11 @@ const PantallaUsuarioLogin = (props) => {
     const handleSignIn = () => {
         signInWithEmailAndPassword(auth, email, password)
             .then((userCredential) => {
-                const user = userCredential.user;
-                console.log('Logueado', 'Email: ' + user.email);
-                Alert.alert('Logueado', 'Email: ' + user.email);
-                console.log(user);
+                const email = userCredential.user.email;
+                console.log('Logueado', 'Email: ' + email);
+                Alert.alert('Logueado', 'Email: ' + email);
+                console.log(email);
+                getData(email)
                 navigation.replace('PantallaUsuarioLoginOk');
             })
             .catch(error => {
@@ -76,7 +121,7 @@ const PantallaUsuarioLogin = (props) => {
                     stringError = "Por favor, revisa los campos de login.";
                 } else if (error.code === "auth/user-not-found") {
                     stringError = "Usuario no encontrado.";
-                } else if (error.code === "auth/invalid-email"){
+                } else if (error.code === "auth/invalid-email") {
                     stringError = "El email introducido no es válido.";
                 }
                 else {

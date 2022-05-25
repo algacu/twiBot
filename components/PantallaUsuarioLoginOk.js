@@ -18,6 +18,11 @@ const PantallaUsuarioLoginOk = (props) => {
         auth
         .signOut()
         .then(() => {
+            global.user = '';
+            global.token = '';
+            global.palabrasCensuradas = '';
+            global.palabrasSecretas = '';
+            global.dados = false;
             navigation.replace("PantallaUsuarioLogin")
         })
     }
