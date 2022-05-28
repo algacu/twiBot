@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { useEffect, useState } from 'react';
-import { StyleSheet, Text, View, Image, SafeAreaView, Pressable, TextInput, Alert } from 'react-native';
+import { StyleSheet, Text, View, Image, SafeAreaView, Pressable, TextInput, Alert, StatusBar } from 'react-native';
 import global from './Global'
 
 import { auth, db } from '../firebase';
@@ -9,7 +9,9 @@ import { collection, getDocs, getDoc, doc, setDoc } from 'firebase/firestore';
 
 import { useNavigation } from '@react-navigation/native';
 
-const PantallaUsuarioLogin = (props) => {
+import { AuthContext } from '../context';
+
+export const PantallaUsuarioLogin = (props) => {
 
     const logo = '../assets/logo_twiBOT.png'
     const titulo = 'Tú mandas'
@@ -23,21 +25,14 @@ const PantallaUsuarioLogin = (props) => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
 
-    const navigation = useNavigation();
+    const [usuario, setUsuario] = useState('');
+    const [token, setToken] = useState('');
+    const [palabrasSecretas, setPalabrasSecretas] = useState('');
+    const [palabrasCensuradas, setPalabrasCensuradas] = useState('');
+    const [emailUsuario, setEmailUsuario] = useState('');
+    const [dados, setDados] = useState('');
 
-
-    // async function getCities(db) {
-    //     const citiesCol = collection(db, 'cities');
-    //     const citySnapshot = await getDocs(citiesCol);
-    //     const cityList = citySnapshot.docs.map(doc => doc.data());
-    //     return cityList;
-    // }
-
-    // const getData = async (user) => {
-    //     const dbUsuarios = collection(db, 'usuarios');
-    //     const dbUsuario = await getDocs(user);
-
-    // }
+    const { signIn, signUp } = React.useContext(AuthContext);
 
     const setData = async (userCredential) => {
         const email = userCredential.user.email;
@@ -47,7 +42,7 @@ const PantallaUsuarioLogin = (props) => {
             email: email,
             palabrasSecretas: '',
             palabrasCensuradas: '',
-            dados: false
+            dados: false,
         });
     }
 
@@ -72,12 +67,12 @@ const PantallaUsuarioLogin = (props) => {
     }
 
     useEffect(() => {
-        const unsuscribe = auth.onAuthStateChanged(user => {
-            if (user) {
-                navigation.navigate('PantallaUsuarioLoginOk')
-            }
-        })
-        return unsuscribe
+        // const unsuscribe = auth.onAuthStateChanged(user => {
+        //     if (user) {
+        //         navigation.navigate('PantallaUsuarioLoginOk')
+        //     }
+        // })
+        // return unsuscribe
     }, [])
 
     const handleCreateAccount = () => {
@@ -88,7 +83,8 @@ const PantallaUsuarioLogin = (props) => {
                 Alert.alert('Cuenta creada', 'Email: ' + email);
                 console.log(email);
                 setData(userCredential);
-                navigation.replace('PantallaUsuarioLoginOk');
+                signUp();
+                //navigation.replace('PantallaUsuarioLoginOk');
             })
             .catch(error => {
                 console.log(error);
@@ -116,7 +112,8 @@ const PantallaUsuarioLogin = (props) => {
                 console.log(email);
                 console.log(userCredential.user)
                 getData(email)
-                navigation.replace('PantallaUsuarioLoginOk');
+                signIn();
+                //navigation.replace('PantallaUsuarioLoginOk');
             })
             .catch(error => {
                 console.log(error);
@@ -139,6 +136,7 @@ const PantallaUsuarioLogin = (props) => {
 
     return (
         <SafeAreaView style={styles.contenedor}>
+            <StatusBar barStyle="light-content" />
             <View style={styles.contenedorImagen}>
                 <Image style={styles.imagen} source={require(logo)} />
             </View>
@@ -272,5 +270,5 @@ const styles = StyleSheet.create({
         marginTop: 15,
     }
 });
-export default PantallaUsuarioLogin;
+
 

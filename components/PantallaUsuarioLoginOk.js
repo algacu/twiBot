@@ -1,9 +1,10 @@
 import * as React from 'react';
 import { useEffect, useState } from 'react';
-import { StyleSheet, Text, View, Image, SafeAreaView, Pressable, TextInput } from 'react-native';
+import { StyleSheet, Text, View, Image, SafeAreaView, Pressable, StatusBar, TextInput } from 'react-native';
 import global from './Global'
 import { auth } from '../firebase';
 import { useNavigation } from '@react-navigation/native';
+import { AuthContext } from '../context';
 
 const PantallaUsuarioLoginOk = (props) => {
 
@@ -11,24 +12,42 @@ const PantallaUsuarioLoginOk = (props) => {
     const titulo = 'Perfil de usuario'
     const subtitulo = 'Email'
     const textoSalir = 'Salir'
-    const email = auth.currentUser.email;
     const navigation = useNavigation();
+    const { signOut } = React.useContext(AuthContext);
+
+    const [email, setEmail] = useState('');
+
+    useEffect(() => {
+        setEmail(global.email)
+    });
+
+    // const guardaVariablesGlobales = async () => {
+    //     try {
+    //         global.email = user;
+    //         global.token = token;
+    //     } catch (error) {
+    //         console.log(error)
+    //     }
+    // }
 
     const handleSignOut = () => {
         auth
-        .signOut()
-        .then(() => {
-            global.user = '';
-            global.token = '';
-            global.palabrasCensuradas = '';
-            global.palabrasSecretas = '';
-            global.dados = false;
-            navigation.replace("PantallaUsuarioLogin")
-        })
+            .signOut()
+            .then(() => {
+                global.user = '';
+                global.token = '';
+                global.palabrasCensuradas = '';
+                global.palabrasSecretas = '';
+                global.dados = false;
+                global.email = '';
+                signOut();
+                //navigation.replace("PantallaUsuarioLogin")
+            })
     }
 
     return (
         <SafeAreaView style={styles.contenedor}>
+            <StatusBar barStyle="light-content" />
             <View style={styles.contenedorImagen}>
                 <Image style={styles.imagen} source={require(logo)} />
             </View>

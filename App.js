@@ -1,15 +1,14 @@
 import * as React from 'react';
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { useEffect, useState, useMemo } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
-import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-
-import PantallaConfigIndex from './components/PantallaConfigIndex';
-import PantallaUsuario from './components/PantallaUsuarioIndex';
-import Pantalla4 from './components/Pantalla4';
-import global from './components/Global';
-
-import { StatusBar, LogBox } from 'react-native';
-import PantallaUsuarioIndex from './components/PantallaUsuarioIndex';
+import { StatusBar, LogBox, View, SafeAreaView } from 'react-native';
+import { NavegacionUsuario } from './NavegacionUsuario';
+import { PantallaUsuarioLogin } from './components/PantallaUsuarioLogin';
+import { ActivityIndicator, Colors } from 'react-native-paper';
+import { createStackNavigator } from '@react-navigation/stack';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { AuthContext } from './context';
+import { global } from './components/Global';
 
 LogBox.ignoreLogs([
   //Parece ser que react navitagion instala un módulo que acaban de actualizar en fase experimental. Utilizo esta función para ignorar el mensaje informativo.
@@ -18,58 +17,55 @@ LogBox.ignoreLogs([
 ]);
 
 
-const Tab = createBottomTabNavigator();
-
 const App = () => {
-  return (
-    <NavigationContainer>
-      <StatusBar barStyle="light-content" />
-      <Tab.Navigator
-        initialRouteName="Usuario"
-        screenOptions={{
-          "tabBarActiveTintColor": "#503484",
-          "tabBarInactiveTintColor": "gray",
-          "tabBarActiveBackgroundColor": "white",
-          "tabBarInactiveBackgroundColor": "white",
-          "tabBarStyle": [
-            {
-              "display": "flex"
-            },
-            null
-          ]
-        }}
-      >
-        <Tab.Screen name='Usuario' component={PantallaUsuarioIndex} options={{
-          tabBarLabel: 'Usuario',
-          headerShown: false,
-          tabBarIcon: ({ color, size }) => (
-            <MaterialCommunityIcons name="account" color={color} size={size} />
-          ),
-        }} />
-        <Tab.Screen name='Bot' component={PantallaConfigIndex} options={{
-          tabBarLabel: 'Bot',
-          headerShown: false,
-          tabBarIcon: ({ color, size }) => (
-            <MaterialCommunityIcons name="robot" color={color} size={size} />
-          ),
-        }} />
-        <Tab.Screen name='Chat' component={Pantalla4} options={{
-          tabBarLabel: 'Chat',
-          headerShown: false,
-          tabBarIcon: ({ color, size }) => (
-            <MaterialCommunityIcons name="twitch" color={color} size={size} />
-          ),
-        }} />
-        <Tab.Screen name='Datos' component={Pantalla4} options={{
-          tabBarLabel: 'Datos',
-          headerShown: false,
-          tabBarIcon: ({ color, size }) => (
-            <MaterialCommunityIcons name="database" color={color} size={size} />
-          ),
-        }} />
-      </Tab.Navigator>
-    </NavigationContainer>
 
+  const [cargando, setCargando] = useState(true);
+  const [userToken, setUserToken] = useState(null);
+
+  const AuthStack = createStackNavigator();
+
+  const authContext = useMemo(() => ({
+    signIn: () => {
+      setCargando(false);
+      setUserToken('tokenSignIn');
+    },
+    signUp: () => {
+      setCargando(false);
+      setUserToken('tokenSignUp');
+    },
+    signOut: () => {
+      setCargando(false);
+      setUserToken(null);
+    }
+  }));
+
+
+  useEffect(() => {
+    setTimeout(() => {
+      setCargando(false);
+    }, 1000)
+  }, []);
+
+  if (cargando) {
+    return (
+      <SafeAreaView style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: '#503484' }}>
+        <StatusBar barStyle="light-content" />
+        <ActivityIndicator animating={true} size='large' color={Colors.white} />
+      </SafeAreaView>
+    );
+  }
+  return (
+    <AuthContext.Provider value={authContext}>
+      <NavigationContainer>
+        {userToken ? (
+          <NavegacionUsuario />
+        ) : (
+          <AuthStack.Navigator>
+            <AuthStack.Screen name='Login' component={PantallaUsuarioLogin} options={{ headerShown: false }} />
+          </AuthStack.Navigator>
+        )}
+      </NavigationContainer>
+    </AuthContext.Provider>
   )
 }
 
