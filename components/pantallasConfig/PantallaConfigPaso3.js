@@ -12,11 +12,8 @@ const PantallaConfigPaso3 = (props) => {
     const titulo = 'Paso 3';
     const subtitulo = '¡Dale vida a tu bot!';
 
-    const textoUsuario = 'Usuario actual:';
-    const textoCanal = 'Canal:';
+    const textoUsuario = 'Canal de Twitch:';
     const textoToken = 'Chat Token:';
-    const textoPalabrasSecretas = '  Palabras secretas';
-    const textoPalabrasCensuradas = '  Palabras censuradas';
     const textoBotonConectar = 'Conectar';
     const textoBotonAtras = 'Atrás';
 
@@ -27,9 +24,19 @@ const PantallaConfigPaso3 = (props) => {
     const palabrasCensuradas = global.palabrasCensuradas;
     const [tokenOK, setTokenOK] = useState('');
 
+    const alertWithoutButtons = () => {
+        const title = 'Conectando a Twitch';
+        const message = 'Enviando las credenciales de\ntu bot a Twitch...';
+        const arrayButtons = []
+        const alertOptions = {
+            cancelable: true,
+        };
+        Alert.alert(title, message, arrayButtons,  alertOptions);
+    }
+
     useEffect(() => {
         var longitudToken = token.length;
-        if (longitudToken > 0){
+        if (longitudToken == 36) {
             setTokenOK('comment-check')
         } else {
             setTokenOK('comment-remove')
@@ -51,20 +58,10 @@ const PantallaConfigPaso3 = (props) => {
                         <Text style={styles.textoInput}>{textoUsuario}</Text>
                         <Text style={styles.subtitulo}>{user}</Text>
                         <Text style={styles.textoInput}>{textoToken}</Text>
-                        <MaterialCommunityIcons style={styles.subtitulo} name={tokenOK} color={'white'} size={20}/>
+                        <MaterialCommunityIcons style={styles.subtitulo} name={tokenOK} color={'white'} size={20} />
                     </View>
                     <View style={styles.contenedorBoton}>
-                        <Pressable style={styles.botonGris} onPress={() => Alert.alert('Palabras Secretas', palabrasSecretas)}>
-                            <MaterialCommunityIcons name="eye" color={'white'} size={20} />
-                            <Text style={styles.textoBoton}>{textoPalabrasSecretas}</Text>
-                        </Pressable>
-                        <Pressable style={styles.botonGris} onPress={() => Alert.alert('Palabras Censuradas', palabrasCensuradas)}>
-                            <MaterialCommunityIcons name="eye" color={'white'} size={20} />
-                            <Text style={styles.textoBoton}>{textoPalabrasCensuradas}</Text>
-                        </Pressable>
-                    </View>
-                    <View style={styles.contenedorBoton}>
-                        <Pressable style={styles.botonVerde} onPress={() => conectar(user, token)}>
+                        <Pressable style={styles.botonVerde} onPress={() => { alertWithoutButtons(); conectar(user, token, palabrasSecretas, palabrasCensuradas)}}>
                             <Text style={styles.textoBoton}>{textoBotonConectar}</Text>
                         </Pressable>
                     </View>

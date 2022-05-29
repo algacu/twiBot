@@ -15,17 +15,18 @@ const PantallaConfigPaso1 = (props) => {
     const inputUsuario = 'Introduce tu usuario:';
     const inputToken = 'Copia y pega tu token:';
     const textoBotonSiguiente = 'Siguiente';
-    const textoBotonAtras = 'Atras';
 
     const [user, setUser] = useState(global.user);
     const [token, setToken] = useState(global.token);
+    const [email] = useState(global.email);
 
     const guardaVariablesGlobales = async () => {
         try {
             global.user = user;
             global.token = token;
-            actualizarBD('usuario', user)
-            actualizarBD('token', token)
+            global.email = email;
+            actualizarBD('usuario', user, email)
+            actualizarBD('token', token, email)
         } catch (error) {
             console.log(error)
         }
@@ -67,11 +68,6 @@ const PantallaConfigPaso1 = (props) => {
                     <View style={styles.contenedorBotonSiguiente}>
                         <Pressable style={styles.botonVerde} onPress={() => { guardaVariablesGlobales(); props.navigation.navigate('PantallaConfigPaso2'); }}>
                             <Text style={styles.texto}>{textoBotonSiguiente}</Text>
-                        </Pressable>
-                    </View>
-                    <View style={styles.contenedorBotonAtras}>
-                        <Pressable style={styles.botonGris} onPress={() => props.navigation.navigate('PantallaConfigInicio')}>
-                            <Text style={styles.texto}>{textoBotonAtras}</Text>
                         </Pressable>
                     </View>
                 </ScrollView>

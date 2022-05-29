@@ -4,7 +4,6 @@ import { StyleSheet, ScrollView, Text, Icon, View, Image, Pressable, SafeAreaVie
 import { TextInput } from 'react-native-gesture-handler';
 import global from '../Global';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import { useNavigation } from '@react-navigation/native';
 import { actualizarBD } from '../../utils/FuncionesFirestore';
 
 
@@ -24,17 +23,17 @@ const PantallaConfigPaso2 = (props) => {
 
     const [palabrasSecretas, setPalabrasSecretas] = useState(global.palabrasSecretas);
     const [palabrasCensuradas, setPalabrasCensuradas] = useState(global.palabrasCensuradas);
-
-    const navigation = useNavigation();
+    const [email] = useState(global.email);
 
     const guardaVariablesGlobales = async () => {
         try {
             global.palabrasSecretas = palabrasSecretas;
             global.palabrasCensuradas = palabrasCensuradas;
             global.dados = dados;
-            actualizarBD('palabrasCensuradas', palabrasCensuradas)
-            actualizarBD('palabrasSecretas', palabrasSecretas)
-            actualizarBD('dados', dados)
+            global.email = email;
+            actualizarBD('palabrasCensuradas', palabrasCensuradas, email)
+            actualizarBD('palabrasSecretas', palabrasSecretas, email)
+            actualizarBD('dados', dados, email)
         } catch (error) {
             console.log(error)
         }
@@ -55,7 +54,7 @@ const PantallaConfigPaso2 = (props) => {
                         <Text style={styles.textoInput}>{inputPalabrasSecretas}</Text>
                         <View flexDirection='row'>
                             <TextInput style={styles.input} value={palabrasSecretas} onChangeText={setPalabrasSecretas} autoCapitalize='none'/>
-                            <Pressable style={styles.botonAyuda} onPress={() => navigation.navigate('PantallaAyudaPalabrasSecretas')}>
+                            <Pressable style={styles.botonAyuda} onPress={() => props.navigation.navigate('PantallaAyudaPalabrasSecretas')}>
                                 <MaterialCommunityIcons name="help" color={'white'} size={20} />
                             </Pressable>
                         </View>
@@ -63,7 +62,7 @@ const PantallaConfigPaso2 = (props) => {
                         
                         <View flexDirection='row'>
                         <TextInput style={styles.input} value={palabrasCensuradas} onChangeText={setPalabrasCensuradas} autoCapitalize='none'/>
-                            <Pressable style={styles.botonAyuda} onPress={() => navigation.navigate('PantallaAyudaPalabrasCensuradas')}>
+                            <Pressable style={styles.botonAyuda} onPress={() => props.navigation.navigate('PantallaAyudaPalabrasCensuradas')}>
                                 <MaterialCommunityIcons name="help" color={'white'} size={20} />
                             </Pressable>
                         </View>
@@ -79,7 +78,7 @@ const PantallaConfigPaso2 = (props) => {
                             onValueChange={activaDados}
                             value={dados}
                         />
-                        <Pressable style={styles.botonAyuda2} onPress={() => navigation.navigate('PantallaAyudaDados')}>
+                        <Pressable style={styles.botonAyuda2} onPress={() => props.navigation.navigate('PantallaAyudaDados')}>
                                 <MaterialCommunityIcons name="help" color={'white'} size={16} />
                             </Pressable>
                     </View>

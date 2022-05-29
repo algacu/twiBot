@@ -35,15 +35,6 @@ const PantallaPerfilUsuario = (props) => {
         }, 2000)
     }, []);
 
-    // const guardaVariablesGlobales = async () => {
-    //     try {
-    //         global.email = user;
-    //         global.token = token;
-    //     } catch (error) {
-    //         console.log(error)
-    //     }
-    // }
-
     const handleSignOut = () => {
         auth
             .signOut()

@@ -1,8 +1,7 @@
 /*En esta carpeta encontramos varias funciones que son llamadas...*/
-import { global } from '../components/Global';
-import { descargarDatos } from './FuncionesFirestore';
+import { Alert } from "react-native";
 
-export const conectar = (usuario, token) => {
+export const conectar = (usuario, token, secretas, censuradas) => {
 
     const tmi = require("tmi.js");
     const { subscribers } = require("tmi.js/lib/commands");
@@ -16,18 +15,35 @@ export const conectar = (usuario, token) => {
             username: usuario,
             password: token,
         },
-        channels: [usuario]
-    }
+        channels: [usuario],
+        connection: {
+            reconnect: true,
+        }
+    };
+
+    const arrayPalabrasCensuradas = censuradas.split(" ");
+    const arrayPalabrasSecretas = secretas.split(" ");
+    const malHablados = [];
+    const recuentoMalHablados = [];
+
 
     try {
 
         const client = new tmi.client(options);
 
-        client.connect() ? alert('Conectado con éxito.') : alert('Error al conectar.');
+        client.connect()
+            .then(() => {
+                Alert.alert('¡Conectado!', 'Bot conectado con éxito a\ntu canal de Twitch.\n\nPuedes desconectar el bot escribiendo\n!quitarbot en el chat.')
+            })
+            .catch(() => {
+                Alert.alert('Error al conectar', 'Por favor, revisa tu usuario y token de Twitch');
+            })
 
         client.on('connected', (address, port) => {
             client.action(options.channels[0], `¡Hola a todos! Conectado a ${address}:${port}`)
-        })
+            console.log(censuradas)
+            console.log(secretas)
+        });
 
         client.on('chat', (target, context, message, self) => {
             if (self) return; //Si el mensaje viene por parte del bot, return (para no entrar en bucle).
@@ -36,7 +52,8 @@ export const conectar = (usuario, token) => {
             let mensaje = message.toLowerCase(); //Limpiamos los espacios en la cadena de texto del mensaje.
             const palabras = mensaje.split(" ");
 
-            //console.log(secretas)
+            console.log(secretas)
+            console.log(censuradas)
             //const arrayPalabrasSecretas = palabrasSecretas.split(" ");
             //const arrayPalabrasCensuradas = palabrasCensuradas.split(" ");
 
@@ -44,12 +61,28 @@ export const conectar = (usuario, token) => {
                 if (typeof palabra === 'string') {
                     palabra.trim();
                 }
-                // arrayPalabrasSecretas.forEach(secreta => {
-                //     if (secreta === palabra){
-                //         client.say(target, `¡${context["display-name"]} ha descubierto la palabra secreta: ${palabra}!`);
-                //     }
-                //     console.log(secreta)
-                // })
+                arrayPalabrasSecretas.forEach(secreta => {
+                    if (secreta === palabra) {
+                        const mayus = palabra.toUpperCase();
+                        client.say(target, `¡${context["display-name"]} ha descubierto una palabra secreta: ${mayus}!`);
+                    }
+                })
+                arrayPalabrasCensuradas.forEach(censurada => {
+                    var malHablado = context["display-name"]
+                    malHablados.push(malHablado)
+                    if (censurada === palabra) {
+                        client.say(target, `MALHABLADO`);
+                        malHablados.forEach(usuario => (recuentoMalHablados[usuario] = recuentoMalHablados[usuario] + 1 || 1))
+                        if (recuentoMalHablados[malHablado === 1]) {
+                            client.say(target, `¡CUIDADO CON EL LENGUAJE ${context["display-name"]}! Primer strike...`);
+                        } else if (recuentoMalHablados[malHablado === 2]) {
+                            client.say(target, `¡CUIDADO CON EL LENGUAJE ${context["display-name"]}! Segundo strike...`);
+                        } else if (recuentoMalHablados[malHablado > 2]) {
+                            client.say(target, `¡CUIDADO CON EL LENGUAJE ${context["display-name"]}! ¡¡Tercer strike y... OUT!!`);
+                        }
+
+                    }
+                })
             });
 
             //palabras.forEach(palabra => console.log(palabra))
@@ -85,7 +118,6 @@ export const conectar = (usuario, token) => {
         })
 
     } catch (error) {
-        alert(error);
         console.log(error);
     }
 };

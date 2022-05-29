@@ -4,8 +4,7 @@ import { global } from '../components/Global';
 
 export const actualizarBD = async (campo, datos, usuario) => {
 
-    const id = 'agarcode@gmail.com'
-    const actualiza = doc(db, 'usuarios', id);
+    const actualiza = doc(db, 'usuarios', usuario);
 
     switch (campo) {
         case 'token':
@@ -33,22 +32,5 @@ export const actualizarBD = async (campo, datos, usuario) => {
                 dados: datos
             });
             break;
-    }
-}
-
-export const descargarDatos = async (tipoDato) => {
-    const id = 'agarcode@gmail.com'
-    const docRef = doc(db, 'usuarios', id);
-    const docSnap = await getDoc(docRef);
-    if (docSnap.exists()) {
-        console.log("Document data:", docSnap.data());
-        const data = docSnap.data();
-        if (tipoDato == 'secretas') {
-            const secretas = data.palabrasSecretas;
-            return secretas;
-        }
-
-    } else {
-        console.log("¡No se ha encontrado el dato en la BD!");
     }
 }
