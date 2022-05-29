@@ -4,7 +4,7 @@ import { StyleSheet, Text, View, Pressable, Image } from 'react-native';
 function PantallaAyudaPalabrasCensuradas({ navigation }) {
 
     const titulo = 'Palabras Censuradas';
-    const texto = 'Introduce una lista de palabras separadas por espacios y el bot las censurará cuando algún usuario las escriba.\n\nEsta función resulta útil para evitar palabras malsonantes o contenido no deseado.';
+    const texto = 'Introduce una lista de palabras separadas por espacios y el bot moderará a los usuarios que las escriban.\n\nCada vez que un usuario escriba alguna de las palabras indicadas, el bot le avisará con un strike.\n\nA los 3 strikes, el usuario quedará expulsado del chat.';
     const textoBotonAtras = 'Atrás'
     const imagen = '../../assets/palabras_censuradas.png'
 
@@ -39,9 +39,9 @@ const styles = StyleSheet.create({
         marginRight: 35,
     },
     contenedorImagen: {
-        width: 275,
-        height: 275,
-        marginTop: 20,
+        width: 250,
+        height: 250,
+        marginTop: 8,
 
     },
     imagen: {
@@ -68,7 +68,7 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
     },
     contenedorBoton: {
-        marginTop: 30,
+        marginTop: 5,
         shadowOffset: { width: 0, height: 4 },
         shadowColor: 'black',
         shadowOpacity: 0.3,

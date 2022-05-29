@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { useEffect, useState } from 'react';
-import { StyleSheet, Text, View, Image, SafeAreaView, Pressable, TextInput, Alert, StatusBar } from 'react-native';
+import { StyleSheet, Text, View, Image, SafeAreaView, Pressable, TextInput, Alert, StatusBar, KeyboardAvoidingView } from 'react-native';
 import { auth, db } from '../../firebase';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
 import { doc, setDoc, getDoc } from 'firebase/firestore';
@@ -100,29 +100,30 @@ export const PantallaCrearUsuario = (props) => {
 
     return (
         <SafeAreaView style={styles.contenedor}>
-            <StatusBar barStyle="light-content" />
             <View style={styles.contenedorImagen}>
                 <Image style={styles.imagen} source={require(logo)} />
             </View>
-            <View style={styles.contenedorTexto}>
-                <Text style={styles.titulo}>{titulo}</Text>
-                <Text style={styles.subtitulo}>{texto1}</Text>
-            </View>
-            <View style={styles.contenedorInput}>
-                <Text style={styles.textoInput}>{textoNombre}</Text>
-                <TextInput style={styles.input} value={nombre} onChangeText={setNombre} placeholder='Nombre y apellidos' placeholderTextColor = "rgba(0, 0, 0, 0.25)"/>
-                <Text style={styles.textoInput}>{textoUsuarioTwitch}</Text>
-                <TextInput style={styles.input} value={usuarioTwitch} onChangeText={setUsuarioTwitch} placeholder='Usuario de Twitch' placeholderTextColor = "rgba(0, 0, 0, 0.25)" autoCapitalize='none'/>
-                <Text style={styles.textoInput}>{textoEmail}</Text>
-                <TextInput style={styles.input} keyboardType='email-address' textContentType='emailAddress' value={email} onChangeText={setEmail} placeholder='email@email.com' placeholderTextColor = "rgba(0, 0, 0, 0.25)" autoCapitalize='none' />
-                <Text style={styles.textoInput}>{textoContrasenya}</Text>
-                <TextInput style={styles.input} secureTextEntry={true} value={password} onChangeText={setPassword} placeholder='contraseña' placeholderTextColor = "rgba(0, 0, 0, 0.25)" autoCapitalize='none' />
-            </View>
-            <View style={styles.contenedorBoton}>
-                <Pressable style={styles.botonVerde} onPress={handleCreateAccount}>
-                    <Text style={styles.texto}>{textoBotonLogin}</Text>
-                </Pressable>
-            </View>
+            <KeyboardAvoidingView style={{ flex: 1 }} behavior={Platform.OS === "ios" ? "position" : ""}>
+                <View style={styles.contenedorTexto}>
+                    <Text style={styles.titulo}>{titulo}</Text>
+                    <Text style={styles.subtitulo}>{texto1}</Text>
+                </View>
+                <View style={styles.contenedorInput}>
+                    <Text style={styles.textoInput}>{textoNombre}</Text>
+                    <TextInput style={styles.input} value={nombre} onChangeText={setNombre} placeholder='Nombre y apellidos' placeholderTextColor="rgba(0, 0, 0, 0.25)" />
+                    <Text style={styles.textoInput}>{textoUsuarioTwitch}</Text>
+                    <TextInput style={styles.input} value={usuarioTwitch} onChangeText={setUsuarioTwitch} placeholder='Usuario de Twitch' placeholderTextColor="rgba(0, 0, 0, 0.25)" autoCapitalize='none' />
+                    <Text style={styles.textoInput}>{textoEmail}</Text>
+                    <TextInput style={styles.input} keyboardType='email-address' textContentType='emailAddress' value={email} onChangeText={setEmail} placeholder='email@email.com' placeholderTextColor="rgba(0, 0, 0, 0.25)" autoCapitalize='none' />
+                    <Text style={styles.textoInput}>{textoContrasenya}</Text>
+                    <TextInput style={styles.input} secureTextEntry={true} value={password} onChangeText={setPassword} placeholder='contraseña' placeholderTextColor="rgba(0, 0, 0, 0.25)" autoCapitalize='none' />
+                </View>
+                <View style={styles.contenedorBoton}>
+                    <Pressable style={styles.botonVerde} onPress={handleCreateAccount}>
+                        <Text style={styles.texto}>{textoBotonLogin}</Text>
+                    </Pressable>
+                </View>
+            </KeyboardAvoidingView>
         </SafeAreaView>
     );
 };

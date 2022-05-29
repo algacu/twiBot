@@ -4,7 +4,7 @@ import { StyleSheet, Text, View, Pressable, Image } from 'react-native';
 function PantallaAyudaDados({ navigation }) {
 
     const titulo = 'Juego de los dados';
-    const texto = 'Actívalo para que tus usuarios puedan lanzar un dado con el comando !dados.\n\nEl bot generará un número al azar simulando la tirada y si el usuario saca 3 o menos, quedará expulsado temporalmente del chat durante 1 minuto.'
+    const texto = 'Actívalo para que tus usuarios puedan lanzar un dado con el comando !dados.\n\nEl bot generará un número al azar simulando la tirada y si el usuario saca 3 o menos, quedará temporalmente expulsado del chat.'
     const textoBotonAtras = 'Atrás'
     const imagen = '../../assets/dados.png'
 

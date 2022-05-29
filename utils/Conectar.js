@@ -43,16 +43,16 @@ export const conectar = (usuario, email, token, secretas, censuradas, dados) => 
             })
 
         client.on('connected', (address, port) => {
-            client.action(options.channels[0], `¡Hola a todos! Conectado a ${address}:${port}`)
-            //console.log(censuradas)
-            //console.log(secretas)
+            client.action(options.channels[0], `¡Hola a todos! twiBot conectado a ${address}:${port}. ¡Probad a escribir "!hola" !`)
+            console.log(censuradas)
+            console.log(secretas)
         });
 
         client.on('chat', (target, context, message, self) => {
             if (self) return; //Si el mensaje viene por parte del bot, return (para no entrar en bucle).
 
             //ANALIZAR EL CONTEXTO (función para controlar datos context)
-            let mensaje = message.toLowerCase();
+            const mensaje = message.toLowerCase();
             const palabras = mensaje.split(" ");
 
             const usuario = `${context["display-name"]}`
@@ -61,7 +61,6 @@ export const conectar = (usuario, email, token, secretas, censuradas, dados) => 
                 usuarios.push(usuario);
             }
             
-
             palabras.forEach(palabra => {
 
                 signos.forEach(signo => {
@@ -71,8 +70,6 @@ export const conectar = (usuario, email, token, secretas, censuradas, dados) => 
                         palabra = palabra.substring(1, palabra.length)
                     }
                 })
-
-                if (palabra.substr(-1) === '.' || palabra.substr(-1) === ',' || palabra.substr(-1) === ';')
 
                 arrayPalabrasSecretas.forEach(secreta => {
                     if (secreta === palabra) {
@@ -103,14 +100,16 @@ export const conectar = (usuario, email, token, secretas, censuradas, dados) => 
                             if (expulsados.includes(malHablado) === false){
                                 expulsados.push(malHablado);
                             }
+                            client.timeout(options.channels[0], context.username, 60, 'Uso continuado de lenguaje malsonante.')
+                            client.say(target, `¡Te has pasado ${context["display-name"]}! Quedas expulsad@ temporalmente del chat por usar lenguaje malsonante.`);
                         }
                     }
                 })
             });
 
-            if (palabras.includes('!hello')) {
+            if (palabras.includes('!hola')) {
                 // client.say(target, `¡Bienvenido ${context["display-name"]}! Llevas suscrito ${context["badge-info"].subscriber} meses`);
-                client.say(target, `¡Bienvenido ${context["display-name"]}!`);
+                client.say(target, `¡Bienvenid@ ${context["display-name"]}!`);
             }
 
             if (palabras.includes('!dados') && dados === true) {
@@ -120,14 +119,11 @@ export const conectar = (usuario, email, token, secretas, censuradas, dados) => 
                 } else {
                     const sides = 6;
                     let numero = Math.floor(Math.random() * sides) + 1;
-
-                    if (numero <= 3) {
-                        client.say(target, `Has sacado ${numero}. Te has salvado ${context["display-name"]}`);
+                    if (numero >= 3) {
+                        client.say(target, `Has sacado ${numero}. ¡Te has salvado ${context["display-name"]}!`);
                     } else {
-                        //client.action(target, `/timeout ${username} 10`)
-                        client.timeout(options.channels[0], context.username, 10, '¡Has fallado!')
-                        client.say(target, `¡La has cagado ${context["display-name"]}! Has sacado ${numero} y quedas expulsado temporalmente.`);
-                        client.getOptions()
+                        client.timeout(options.channels[0], context.username, 60, 'Mala suerte en los dados.')
+                        client.say(target, `¡Mala suerte ${context["display-name"]}! Has sacado ${numero} y quedas expulsad@ temporalmente.`);
                     }
                 }
             }
@@ -139,11 +135,8 @@ export const conectar = (usuario, email, token, secretas, censuradas, dados) => 
                 var diaFormateado = dia.replace('/', '.');
                 var fechaFormateada = diaFormateado.replace('/', '.');
                 var id = email + '-' + fechaFormateada;
-                console.log(id);
-                console.log(usuarios.toString());
-                console.log(expulsados.toString());
                 cargarDatosStreaming(id, usuarios.toString(), expulsados.toString(), current.toLocaleTimeString())
-                client.say(target, 'Bot desconectado.');
+                client.say(target, 'twiBot desconectado.');
                 client.disconnect();
             }
 

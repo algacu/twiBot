@@ -43,16 +43,3 @@ export const cargarDatosStreaming = async (id, usuarios, expulsados, hora) => {
     });
 }
 
-export const descargarDatosStreaming = async (id) => {
-    const docRef = doc(db, 'streaming', id);
-    const docSnap = await getDoc(docRef);
-    if (docSnap.exists()) {
-        console.log("Document data:", docSnap.data());
-        const data = docSnap.data();
-        const resultado = data.usuarios + '/' + data.expulsados
-        return resultado
-    } else {
-        // doc.data() will be undefined in this case
-        console.log("¡No se ha encontrado al usuario en la BD!");
-    }
-}
