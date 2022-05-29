@@ -1,12 +1,12 @@
 import React from 'react';
 import { StyleSheet, Text, View, Pressable, Image } from 'react-native';
 
-function PantallaAyudaPalabrasCensuradas({ navigation }) {
+function PantallaAyudaDados({ navigation }) {
 
-    const titulo = 'Palabras Secretas';
-    const texto = 'Introduce una lista de palabras separadas por espacios y deja que tus usuarios la adivinen utilizando el comando !palabra.\n\nCuando el bot detecte que la palabra introducida es correcta, lanzará un mensaje felicitando al usuario.';
+    const titulo = 'Juego de los dados';
+    const texto = 'Actívalo para que tus usuarios puedan lanzar un dado con el comando !dados.\n\nEl bot generará un número al azar simulando la tirada y si el usuario saca 3 o menos, quedará expulsado temporalmente del chat durante 1 minuto.'
     const textoBotonAtras = 'Atrás'
-    const imagen = '../assets/palabras_secretas.png'
+    const imagen = '../../assets/dados.png'
 
     return (
         <View style={styles.contenedor}>
@@ -87,4 +87,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default PantallaAyudaPalabrasCensuradas;
+export default PantallaAyudaDados;

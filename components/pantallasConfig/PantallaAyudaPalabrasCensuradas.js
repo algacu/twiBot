@@ -6,7 +6,7 @@ function PantallaAyudaPalabrasCensuradas({ navigation }) {
     const titulo = 'Palabras Censuradas';
     const texto = 'Introduce una lista de palabras separadas por espacios y el bot las censurará cuando algún usuario las escriba.\n\nEsta función resulta útil para evitar palabras malsonantes o contenido no deseado.';
     const textoBotonAtras = 'Atrás'
-    const imagen = '../assets/palabras_censuradas.png'
+    const imagen = '../../assets/palabras_censuradas.png'
 
     return (
         <View style={styles.contenedor}>

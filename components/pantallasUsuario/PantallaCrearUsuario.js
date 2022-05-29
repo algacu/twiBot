@@ -1,43 +1,35 @@
 import * as React from 'react';
 import { useEffect, useState } from 'react';
 import { StyleSheet, Text, View, Image, SafeAreaView, Pressable, TextInput, Alert, StatusBar } from 'react-native';
-import global from './Global'
+import { auth, db } from '../../firebase';
+import { createUserWithEmailAndPassword } from 'firebase/auth';
+import { doc, setDoc, getDoc } from 'firebase/firestore';
+import { AuthContext } from '../../context';
+import global from '../Global';
 
-import { auth, db } from '../firebase';
-import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from 'firebase/auth';
-import { collection, getDocs, getDoc, doc, setDoc } from 'firebase/firestore';
+export const PantallaCrearUsuario = (props) => {
 
-import { useNavigation } from '@react-navigation/native';
-
-import { AuthContext } from '../context';
-
-export const PantallaUsuarioLogin = (props) => {
-
-    const logo = '../assets/logo_twiBOT.png'
-    const titulo = 'Tú mandas'
-    const texto1 = 'Convierte tu perfil de Twitch en un bot \n y modera fácilmente tus streams'
-    const texto2 = '¡Configura tu propio bot en 3 pasos!'
-    const textoBotonLogin = 'Comenzar'
-    const textoCrearCuenta = 'Registrarse'
+    const logo = '../../assets/logo_twiBOT.png'
+    const titulo = 'Regístrate'
+    const texto1 = 'Estás a un paso de llevar tus\nstreamings a otro nivel'
+    const textoNombre = 'Nombre y appelidos'
+    const textoUsuarioTwitch = 'Usuario de Twitch'
     const textoEmail = 'Correo electrónico'
-    const textoContrasenya = 'Contraseña'
+    const textoContrasenya = 'Contraseña de twiBot'
+    const textoBotonLogin = 'Comenzar'
 
+    const [nombre, setNombre] = useState('');
+    const [usuarioTwitch, setUsuarioTwitch] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
 
-    const [usuario, setUsuario] = useState('');
-    const [token, setToken] = useState('');
-    const [palabrasSecretas, setPalabrasSecretas] = useState('');
-    const [palabrasCensuradas, setPalabrasCensuradas] = useState('');
-    const [emailUsuario, setEmailUsuario] = useState('');
-    const [dados, setDados] = useState('');
-
-    const { signIn, signUp } = React.useContext(AuthContext);
+    const { signUp } = React.useContext(AuthContext);
 
     const setData = async (userCredential) => {
         const email = userCredential.user.email;
         await setDoc(doc(db, 'usuarios', email), {
-            usuario: '',
+            nombre: nombre,
+            usuario: usuarioTwitch,
             token: '',
             email: email,
             palabrasSecretas: '',
@@ -60,31 +52,24 @@ export const PantallaUsuarioLogin = (props) => {
             global.palabrasSecretas = data.palabrasSecretas;
             global.dados = data.dados;
             global.email = data.email;
+            global.nombre = data.nombre;
         } else {
             // doc.data() will be undefined in this case
             console.log("¡No se ha encontrado al usuario en la BD!");
         }
     }
 
-    useEffect(() => {
-        // const unsuscribe = auth.onAuthStateChanged(user => {
-        //     if (user) {
-        //         navigation.navigate('PantallaUsuarioLoginOk')
-        //     }
-        // })
-        // return unsuscribe
-    }, [])
-
     const handleCreateAccount = () => {
         createUserWithEmailAndPassword(auth, email, password)
             .then((userCredential) => {
                 const email = userCredential.user.email;
                 console.log('Cuenta creada', 'Email: ' + email);
-                Alert.alert('Cuenta creada', 'Email: ' + email);
-                console.log(email);
                 setData(userCredential);
+                setTimeout(() => {
+                    null
+                }, 3000)
+                getData(email)
                 signUp();
-                //navigation.replace('PantallaUsuarioLoginOk');
             })
             .catch(error => {
                 console.log(error);
@@ -103,36 +88,15 @@ export const PantallaUsuarioLogin = (props) => {
             })
     }
 
-    const handleSignIn = () => {
-        signInWithEmailAndPassword(auth, email, password)
-            .then((userCredential) => {
-                const email = userCredential.user.email;
-                console.log('Logueado', 'Email: ' + email);
-                Alert.alert('Logueado', 'Email: ' + email);
-                console.log(email);
-                console.log(userCredential.user)
-                getData(email)
-                signIn();
-                //navigation.replace('PantallaUsuarioLoginOk');
-            })
-            .catch(error => {
-                console.log(error);
-                var stringError = '';
-                if (error.code === "auth/wrong-password") {
-                    stringError = "Contraseña incorrecta.";
-                } else if (error.code === "auth/internal-error") {
-                    stringError = "Por favor, revisa los campos de login.";
-                } else if (error.code === "auth/user-not-found") {
-                    stringError = "Usuario no encontrado.";
-                } else if (error.code === "auth/invalid-email") {
-                    stringError = "El email introducido no es válido.";
-                }
-                else {
-                    stringError = error.message;
-                }
-                Alert.alert('Error', stringError)
-            })
-    }
+
+    // useEffect(() => {
+    //     // const unsuscribe = auth.onAuthStateChanged(user => {
+    //     //     if (user) {
+    //     //         navigation.navigate('PantallaUsuarioLoginOk')
+    //     //     }
+    //     // })
+    //     // return unsuscribe
+    // }, [])
 
     return (
         <SafeAreaView style={styles.contenedor}>
@@ -142,20 +106,21 @@ export const PantallaUsuarioLogin = (props) => {
             </View>
             <View style={styles.contenedorTexto}>
                 <Text style={styles.titulo}>{titulo}</Text>
-                <Text style={styles.texto1}>{texto1}</Text>
+                <Text style={styles.subtitulo}>{texto1}</Text>
             </View>
             <View style={styles.contenedorInput}>
+                <Text style={styles.textoInput}>{textoNombre}</Text>
+                <TextInput style={styles.input} value={nombre} onChangeText={setNombre} placeholder='Nombre y apellidos'/>
+                <Text style={styles.textoInput}>{textoUsuarioTwitch}</Text>
+                <TextInput style={styles.input} value={usuarioTwitch} onChangeText={setUsuarioTwitch} placeholder='Usuario de Twitch' autoCapitalize='none'/>
                 <Text style={styles.textoInput}>{textoEmail}</Text>
                 <TextInput style={styles.input} keyboardType='email-address' textContentType='emailAddress' value={email} onChangeText={setEmail} placeholder='email@email.com' autoCapitalize='none' />
                 <Text style={styles.textoInput}>{textoContrasenya}</Text>
                 <TextInput style={styles.input} secureTextEntry={true} value={password} onChangeText={setPassword} placeholder='password' autoCapitalize='none' />
             </View>
             <View style={styles.contenedorBoton}>
-                <Pressable style={styles.botonVerde} onPress={handleSignIn}>
+                <Pressable style={styles.botonVerde} onPress={handleCreateAccount}>
                     <Text style={styles.texto}>{textoBotonLogin}</Text>
-                </Pressable>
-                <Pressable onPress={handleCreateAccount}>
-                    <Text style={styles.texto3}>{textoCrearCuenta}</Text>
                 </Pressable>
             </View>
         </SafeAreaView>
@@ -204,27 +169,12 @@ const styles = StyleSheet.create({
         color: 'white',
         textAlign: 'center',
     },
-    texto1: {
+    subtitulo: {
         marginTop: 5,
         lineHeight: 25,
         fontSize: 20,
         color: 'white',
         textAlign: 'center',
-    },
-    texto2: {
-        marginTop: 100,
-        lineHeight: 25,
-        fontSize: 19,
-        color: 'white',
-        textAlign: 'center',
-    },
-    texto3: {
-        marginTop: 15,
-        lineHeight: 15,
-        fontSize: 14,
-        color: '#e0e0e0',
-        textAlign: 'center',
-        textDecorationLine: 'underline',
     },
     contenedorInput: {
         marginTop: 20,

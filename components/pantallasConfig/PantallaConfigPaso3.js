@@ -2,14 +2,13 @@ import { StatusBar } from 'expo-status-bar';
 import * as React from 'react';
 import { useEffect, useState } from 'react';
 import { StyleSheet, ScrollView, Text, View, Image, Pressable, SafeAreaView, KeyboardAvoidingView, Alert } from 'react-native';
-import { TextInput } from 'react-native-gesture-handler';
-import global from './Global'
+import global from '../Global'
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import { conectar } from '../utils/Conectar';
+import { conectar } from '../../utils/Conectar';
 
 const PantallaConfigPaso3 = (props) => {
 
-    const logo = '../assets/logo_twiBOT.png';
+    const logo = '../../assets/logo_twiBOT.png';
     const titulo = 'Paso 3';
     const subtitulo = '¡Dale vida a tu bot!';
 

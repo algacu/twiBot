@@ -1,4 +1,6 @@
 /*En esta carpeta encontramos varias funciones que son llamadas...*/
+import { global } from '../components/Global';
+import { descargarDatos } from './FuncionesFirestore';
 
 export const conectar = (usuario, token) => {
 
@@ -21,36 +23,44 @@ export const conectar = (usuario, token) => {
 
         const client = new tmi.client(options);
 
-        client.connect();
-        alert('Conectado con éxito.')
-
-
-        // if (client.connect()){
-        //     alert('Conectado con éxito.')
-        // } else {
-        //     alert('Error al conectar.')
-        // }
+        client.connect() ? alert('Conectado con éxito.') : alert('Error al conectar.');
 
         client.on('connected', (address, port) => {
             client.action(options.channels[0], `¡Hola a todos! Conectado a ${address}:${port}`)
-
         })
 
         client.on('chat', (target, context, message, self) => {
             if (self) return; //Si el mensaje viene por parte del bot, return (para no entrar en bucle).
 
             //ANALIZAR EL CONTEXTO (función para controlar datos context)
+            let mensaje = message.toLowerCase(); //Limpiamos los espacios en la cadena de texto del mensaje.
+            const palabras = mensaje.split(" ");
 
-            let comando = message.trim(); //Limpiamos los espacios en la cadena de texto del mensaje.
-            comando = comando.toLowerCase();
+            //console.log(secretas)
+            //const arrayPalabrasSecretas = palabrasSecretas.split(" ");
+            //const arrayPalabrasCensuradas = palabrasCensuradas.split(" ");
 
-            if (comando == '!hello') {
+            palabras.forEach(palabra => {
+                if (typeof palabra === 'string') {
+                    palabra.trim();
+                }
+                // arrayPalabrasSecretas.forEach(secreta => {
+                //     if (secreta === palabra){
+                //         client.say(target, `¡${context["display-name"]} ha descubierto la palabra secreta: ${palabra}!`);
+                //     }
+                //     console.log(secreta)
+                // })
+            });
+
+            //palabras.forEach(palabra => console.log(palabra))
+
+            if (palabras.includes('!hello')) {
                 // client.say(target, `¡Bienvenido ${context["display-name"]}! Llevas suscrito ${context["badge-info"].subscriber} meses`);
                 client.say(target, `¡Bienvenido ${context["display-name"]}!`);
-            } else if (comando == '!caca') {
+            } else if (palabras.includes('!caca')) {
                 client.say(target, `VAYA VAYA, CONQUE TE GUSTA HACER POPÓ ${context["display-name"]}`);
-                console.log(context);
-            } else if (comando == '!ruleta') {
+                //console.log(context);
+            } else if (palabras.includes('!ruleta')) {
 
                 if (context.username.toLowerCase() === options.identity.username) {
                     client.say(target, 'Un buen streamer no juega a los dados.');
@@ -67,7 +77,7 @@ export const conectar = (usuario, token) => {
                         client.getOptions()
                     }
                 }
-            } else if (comando == '!quitarbot' && context.username.toLowerCase() === options.identity.username) {
+            } else if (palabras.includes('!quitarbot') && context.username.toLowerCase() === options.identity.username) {
                 client.say(target, 'Bot desconectado.');
                 client.disconnect();
             }

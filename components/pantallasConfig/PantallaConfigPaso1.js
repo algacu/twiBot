@@ -3,11 +3,12 @@ import * as React from 'react';
 import { useEffect, useState } from 'react';
 import { StyleSheet, ScrollView, Text, View, Image, Pressable, Linking, SafeAreaView, KeyboardAvoidingView } from 'react-native';
 import { TextInput } from 'react-native-gesture-handler';
-import global from './Global'
+import global from '../Global'
+import { actualizarBD } from '../../utils/FuncionesFirestore';
 
 const PantallaConfigPaso1 = (props) => {
 
-    const logo = '../assets/logo_twiBOT.png';
+    const logo = '../../assets/logo_twiBOT.png';
     const titulo = 'Paso 1';
     const subtitulo = 'Obtén tu token autentificador para \n hacer uso de los servicios de Twitch';
     const textoBotonObtenerToken = 'Obtén tu token'
@@ -23,6 +24,8 @@ const PantallaConfigPaso1 = (props) => {
         try {
             global.user = user;
             global.token = token;
+            actualizarBD('usuario', user)
+            actualizarBD('token', token)
         } catch (error) {
             console.log(error)
         }
@@ -57,9 +60,9 @@ const PantallaConfigPaso1 = (props) => {
                     </View>
                     <View style={styles.contenedorInput}>
                         <Text style={styles.textoInput}>{inputToken}</Text>
-                        <TextInput style={styles.input} /*secureTextEntry={true}*/ value={token} onChangeText={setToken} />
+                        <TextInput style={styles.input} /*secureTextEntry={true}*/ value={token} onChangeText={setToken} autoCapitalize='none' />
                         <Text style={styles.textoInput}>{inputUsuario}</Text>
-                        <TextInput style={styles.input} value={user} onChangeText={setUser} />
+                        <TextInput style={styles.input} value={user} onChangeText={setUser} autoCapitalize='none' />
                     </View>
                     <View style={styles.contenedorBotonSiguiente}>
                         <Pressable style={styles.botonVerde} onPress={() => { guardaVariablesGlobales(); props.navigation.navigate('PantallaConfigPaso2'); }}>

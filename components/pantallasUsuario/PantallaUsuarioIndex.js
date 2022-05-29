@@ -1,8 +1,7 @@
 import * as React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
 import { StyleSheet } from 'react-native';
-//import PantallaUsuarioLogin from './PantallaUsuarioLogin';
-import PantallaUsuarioLoginOk from './PantallaUsuarioLoginOk';
+import PantallaPerfilUsuario from './PantallaPerfilUsuario';
 
 
 const Stack = createStackNavigator();
@@ -10,8 +9,7 @@ const Stack = createStackNavigator();
 const PantallaUsuarioIndex = () => {
     return (
         <Stack.Navigator options="false" >
-            {/* <Stack.Screen name="PantallaUsuarioLogin" component={PantallaUsuarioLogin} options={{ headerShown: false }}/> */}
-            <Stack.Screen name="PantallaUsuarioLoginOk" component={PantallaUsuarioLoginOk} options={{ headerShown: false }}/>
+            <Stack.Screen name="PantallaPerfilUsuario" component={PantallaPerfilUsuario} options={{ headerShown: false }}/>
         </Stack.Navigator>
     )
 }

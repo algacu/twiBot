@@ -2,14 +2,15 @@ import * as React from 'react';
 import { useEffect, useState } from 'react';
 import { StyleSheet, ScrollView, Text, Icon, View, Image, Pressable, SafeAreaView, KeyboardAvoidingView, Switch } from 'react-native';
 import { TextInput } from 'react-native-gesture-handler';
-import global from './Global';
+import global from '../Global';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import { useNavigation } from '@react-navigation/native';
+import { actualizarBD } from '../../utils/FuncionesFirestore';
 
 
 const PantallaConfigPaso2 = (props) => {
 
-    const logo = '../assets/logo_twiBOT.png';
+    const logo = '../../assets/logo_twiBOT.png';
     const titulo = 'Paso 2';
     const subtitulo = 'Personaliza las funciones de tu bot';
     const textoBotonSiguiente = 'Siguiente';
@@ -18,34 +19,22 @@ const PantallaConfigPaso2 = (props) => {
     const inputPalabrasCensuradas = 'Censura palabras:';
     const toggleSwitch1Texto = 'Juego de los dados';
 
-    const [isEnabledSwitch1, setIsEnabledSwtich1] = useState(false);
-    const toggleSwitch1 = () => setIsEnabledSwtich1(previousState => !previousState);
+    const [dados, setDados] = useState(global.dados);
+    const activaDados = () => setDados(previousState => !previousState);
 
     const [palabrasSecretas, setPalabrasSecretas] = useState(global.palabrasSecretas);
     const [palabrasCensuradas, setPalabrasCensuradas] = useState(global.palabrasCensuradas);
 
     const navigation = useNavigation();
 
-    // useEffect(() => {
-    //     global.palabrasSecretas = convierteStringArray(palabrasSecretas);
-    //     global.palabrasCensuradas = convierteStringArray(palabrasCensuradas);
-    // }, [])
-
-    // const convierteStringArray = async (cadena) => {
-    //     try {
-    //         let array = [];
-    //         let cadenaMinusculas = cadena.toLowerCase();
-    //         array = cadenaMinusculas.split(' ');
-    //         return array;
-    //     } catch (error) {
-    //         console.log(error)
-    //     }
-    // }
-
     const guardaVariablesGlobales = async () => {
         try {
             global.palabrasSecretas = palabrasSecretas;
             global.palabrasCensuradas = palabrasCensuradas;
+            global.dados = dados;
+            actualizarBD('palabrasCensuradas', palabrasCensuradas)
+            actualizarBD('palabrasSecretas', palabrasSecretas)
+            actualizarBD('dados', dados)
         } catch (error) {
             console.log(error)
         }
@@ -65,7 +54,7 @@ const PantallaConfigPaso2 = (props) => {
                     <View style={styles.contenedorInput}>
                         <Text style={styles.textoInput}>{inputPalabrasSecretas}</Text>
                         <View flexDirection='row'>
-                            <TextInput style={styles.input} value={palabrasSecretas} onChangeText={setPalabrasSecretas} />
+                            <TextInput style={styles.input} value={palabrasSecretas} onChangeText={setPalabrasSecretas} autoCapitalize='none'/>
                             <Pressable style={styles.botonAyuda} onPress={() => navigation.navigate('PantallaAyudaPalabrasSecretas')}>
                                 <MaterialCommunityIcons name="help" color={'white'} size={20} />
                             </Pressable>
@@ -73,7 +62,7 @@ const PantallaConfigPaso2 = (props) => {
                         <Text style={styles.textoInput}>{inputPalabrasCensuradas}</Text>
                         
                         <View flexDirection='row'>
-                        <TextInput style={styles.input} value={palabrasCensuradas} onChangeText={setPalabrasCensuradas} />
+                        <TextInput style={styles.input} value={palabrasCensuradas} onChangeText={setPalabrasCensuradas} autoCapitalize='none'/>
                             <Pressable style={styles.botonAyuda} onPress={() => navigation.navigate('PantallaAyudaPalabrasCensuradas')}>
                                 <MaterialCommunityIcons name="help" color={'white'} size={20} />
                             </Pressable>
@@ -85,20 +74,15 @@ const PantallaConfigPaso2 = (props) => {
                     <View style={styles.contenedorSwitch}>
                         <Switch
                             trackColor={{ false: '#a8323e', true: '#4e730d' }}
-                            thumbColor={isEnabledSwitch1 ? '#85AD3A' : '#f4f3f4'}
+                            thumbColor={dados ? '#85AD3A' : '#f4f3f4'}
                             ios_backgroundColor="#3e3e3e"
-                            onValueChange={toggleSwitch1}
-                            value={isEnabledSwitch1}
+                            onValueChange={activaDados}
+                            value={dados}
                         />
                         <Pressable style={styles.botonAyuda2} onPress={() => navigation.navigate('PantallaAyudaDados')}>
                                 <MaterialCommunityIcons name="help" color={'white'} size={16} />
                             </Pressable>
                     </View>
-                    {/* <View style={styles.contenedorBoton2}>
-                        <Pressable style={styles.botonAyuda} onPress={() => navigation.navigate('PantallaAyuda')}>
-                            <MaterialCommunityIcons name="help" color={'white'} size={14} />
-                        </Pressable>
-                    </View> */}
                     <View style={styles.contenedorBotonSiguiente}>
                         <Pressable style={styles.botonVerde} onPress={() => { guardaVariablesGlobales(); props.navigation.navigate('PantallaConfigPaso3'); }}>
                             <Text style={styles.texto}>{textoBotonSiguiente}</Text>
