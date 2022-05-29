@@ -1,12 +1,10 @@
 import * as React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-
+import PantallaUsuarioIndex from './pantallasUsuario/PantallaUsuarioIndex';
 import PantallaConfigIndex from './pantallasConfig/PantallaConfigIndex';
 import PantallaChat from './PantallaChat';
-
-import PantallaUsuarioIndex from './pantallasUsuario/PantallaUsuarioIndex';
-
+import PantallaDatos from './PantallaDatos';
 
 export const Navegacion = () => {
 
@@ -50,7 +48,7 @@ export const Navegacion = () => {
             <MaterialCommunityIcons name="twitch" color={color} size={size} />
           ),
         }} />
-        <Tab.Screen name='Datos' component={PantallaChat} options={{
+        <Tab.Screen name='Datos' component={PantallaDatos} options={{
           tabBarLabel: 'Datos',
           headerShown: false,
           tabBarIcon: ({ color, size }) => (

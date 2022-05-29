@@ -61,7 +61,7 @@ const PantallaConfigPaso1 = (props) => {
                     </View>
                     <View style={styles.contenedorInput}>
                         <Text style={styles.textoInput}>{inputToken}</Text>
-                        <TextInput style={styles.input} /*secureTextEntry={true}*/ value={token} onChangeText={setToken} autoCapitalize='none' />
+                        <TextInput style={styles.input} secureTextEntry={true} value={token} onChangeText={setToken} autoCapitalize='none' />
                         <Text style={styles.textoInput}>{inputUsuario}</Text>
                         <TextInput style={styles.input} value={user} onChangeText={setUser} autoCapitalize='none' />
                     </View>

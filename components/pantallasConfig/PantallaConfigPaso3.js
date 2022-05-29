@@ -19,10 +19,11 @@ const PantallaConfigPaso3 = (props) => {
 
     const user = global.user;
     const token = global.token;
-    const canal = global.user;
     const palabrasSecretas = global.palabrasSecretas;
     const palabrasCensuradas = global.palabrasCensuradas;
-    const [tokenOK, setTokenOK] = useState('');
+    const dados = global.dados;
+    const email = global.email;
+    const [tokenValido, setTokenValido] = useState('');
 
     const alertWithoutButtons = () => {
         const title = 'Conectando a Twitch';
@@ -37,9 +38,9 @@ const PantallaConfigPaso3 = (props) => {
     useEffect(() => {
         var longitudToken = token.length;
         if (longitudToken == 36) {
-            setTokenOK('comment-check')
+            setTokenValido('comment-check')
         } else {
-            setTokenOK('comment-remove')
+            setTokenValido('comment-remove')
         }
     }, [])
 
@@ -58,10 +59,10 @@ const PantallaConfigPaso3 = (props) => {
                         <Text style={styles.textoInput}>{textoUsuario}</Text>
                         <Text style={styles.subtitulo}>{user}</Text>
                         <Text style={styles.textoInput}>{textoToken}</Text>
-                        <MaterialCommunityIcons style={styles.subtitulo} name={tokenOK} color={'white'} size={20} />
+                        <MaterialCommunityIcons style={styles.subtitulo} name={tokenValido} color={'white'} size={20} />
                     </View>
                     <View style={styles.contenedorBoton}>
-                        <Pressable style={styles.botonVerde} onPress={() => { alertWithoutButtons(); conectar(user, token, palabrasSecretas, palabrasCensuradas)}}>
+                        <Pressable style={styles.botonVerde} onPress={() => { alertWithoutButtons(); conectar(user, email, token, palabrasSecretas, palabrasCensuradas, dados)}}>
                             <Text style={styles.textoBoton}>{textoBotonConectar}</Text>
                         </Pressable>
                     </View>

@@ -3,7 +3,7 @@ import { WebView } from 'react-native-webview';
 import { StyleSheet, View, SafeAreaView, StatusBar, Image, Text } from 'react-native';
 import global from './Global';
 
-const PantallaChat = () => {
+const PantallaChat = (props) => {
 
   const canal = global.user;
   const urlCanal = 'https://www.twitch.tv/' + canal + '/chat';

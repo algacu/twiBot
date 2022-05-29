@@ -20,7 +20,7 @@ LogBox.ignoreLogs([
 
 const AuthStack = createStackNavigator();
 
-export const Index = () => {
+export const AppIndex = () => {
 
   const [cargando, setCargando] = useState(true);
   const [userToken, setUserToken] = useState(null);

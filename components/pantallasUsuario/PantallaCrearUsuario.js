@@ -110,13 +110,13 @@ export const PantallaCrearUsuario = (props) => {
             </View>
             <View style={styles.contenedorInput}>
                 <Text style={styles.textoInput}>{textoNombre}</Text>
-                <TextInput style={styles.input} value={nombre} onChangeText={setNombre} placeholder='Nombre y apellidos'/>
+                <TextInput style={styles.input} value={nombre} onChangeText={setNombre} placeholder='Nombre y apellidos' placeholderTextColor = "rgba(0, 0, 0, 0.25)"/>
                 <Text style={styles.textoInput}>{textoUsuarioTwitch}</Text>
-                <TextInput style={styles.input} value={usuarioTwitch} onChangeText={setUsuarioTwitch} placeholder='Usuario de Twitch' autoCapitalize='none'/>
+                <TextInput style={styles.input} value={usuarioTwitch} onChangeText={setUsuarioTwitch} placeholder='Usuario de Twitch' placeholderTextColor = "rgba(0, 0, 0, 0.25)" autoCapitalize='none'/>
                 <Text style={styles.textoInput}>{textoEmail}</Text>
-                <TextInput style={styles.input} keyboardType='email-address' textContentType='emailAddress' value={email} onChangeText={setEmail} placeholder='email@email.com' autoCapitalize='none' />
+                <TextInput style={styles.input} keyboardType='email-address' textContentType='emailAddress' value={email} onChangeText={setEmail} placeholder='email@email.com' placeholderTextColor = "rgba(0, 0, 0, 0.25)" autoCapitalize='none' />
                 <Text style={styles.textoInput}>{textoContrasenya}</Text>
-                <TextInput style={styles.input} secureTextEntry={true} value={password} onChangeText={setPassword} placeholder='password' autoCapitalize='none' />
+                <TextInput style={styles.input} secureTextEntry={true} value={password} onChangeText={setPassword} placeholder='contraseña' placeholderTextColor = "rgba(0, 0, 0, 0.25)" autoCapitalize='none' />
             </View>
             <View style={styles.contenedorBoton}>
                 <Pressable style={styles.botonVerde} onPress={handleCreateAccount}>

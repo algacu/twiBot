@@ -1,9 +1,9 @@
 import * as React from 'react';
-import { Index } from './Index';
+import { AppIndex } from './AppIndex';
 
 const App = () => {
   return(
-    <Index/>
+    <AppIndex/>
   )
 }
 

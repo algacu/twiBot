@@ -1,7 +1,8 @@
 /*En esta carpeta encontramos varias funciones que son llamadas...*/
 import { Alert } from "react-native";
+import { cargarDatosStreaming } from "./FuncionesFirestore";
 
-export const conectar = (usuario, token, secretas, censuradas) => {
+export const conectar = (usuario, email, token, secretas, censuradas, dados) => {
 
     const tmi = require("tmi.js");
     const { subscribers } = require("tmi.js/lib/commands");
@@ -24,7 +25,9 @@ export const conectar = (usuario, token, secretas, censuradas) => {
     const arrayPalabrasCensuradas = censuradas.split(" ");
     const arrayPalabrasSecretas = secretas.split(" ");
     const malHablados = [];
-    const recuentoMalHablados = [];
+    const usuarios = [];
+    const expulsados = [];
+    const signos = ['.', ',', ';', ':', '-', '_', '/', ')', '(', '!']
 
 
     try {
@@ -41,26 +44,36 @@ export const conectar = (usuario, token, secretas, censuradas) => {
 
         client.on('connected', (address, port) => {
             client.action(options.channels[0], `¡Hola a todos! Conectado a ${address}:${port}`)
-            console.log(censuradas)
-            console.log(secretas)
+            //console.log(censuradas)
+            //console.log(secretas)
         });
 
         client.on('chat', (target, context, message, self) => {
             if (self) return; //Si el mensaje viene por parte del bot, return (para no entrar en bucle).
 
             //ANALIZAR EL CONTEXTO (función para controlar datos context)
-            let mensaje = message.toLowerCase(); //Limpiamos los espacios en la cadena de texto del mensaje.
+            let mensaje = message.toLowerCase();
             const palabras = mensaje.split(" ");
 
-            console.log(secretas)
-            console.log(censuradas)
-            //const arrayPalabrasSecretas = palabrasSecretas.split(" ");
-            //const arrayPalabrasCensuradas = palabrasCensuradas.split(" ");
+            const usuario = `${context["display-name"]}`
+            
+            if (usuarios.includes(usuario) === false){
+                usuarios.push(usuario);
+            }
+            
 
             palabras.forEach(palabra => {
-                if (typeof palabra === 'string') {
-                    palabra.trim();
-                }
+
+                signos.forEach(signo => {
+                    if (signo === palabra.substring(palabra.length-1, palabra.length)){
+                        palabra = palabra.substring(0, palabra.length - 1)
+                    } else if (signo === palabra.substring(0, 1)){
+                        palabra = palabra.substring(1, palabra.length)
+                    }
+                })
+
+                if (palabra.substr(-1) === '.' || palabra.substr(-1) === ',' || palabra.substr(-1) === ';')
+
                 arrayPalabrasSecretas.forEach(secreta => {
                     if (secreta === palabra) {
                         const mayus = palabra.toUpperCase();
@@ -68,32 +81,39 @@ export const conectar = (usuario, token, secretas, censuradas) => {
                     }
                 })
                 arrayPalabrasCensuradas.forEach(censurada => {
-                    var malHablado = context["display-name"]
-                    malHablados.push(malHablado)
                     if (censurada === palabra) {
-                        client.say(target, `MALHABLADO`);
-                        malHablados.forEach(usuario => (recuentoMalHablados[usuario] = recuentoMalHablados[usuario] + 1 || 1))
-                        if (recuentoMalHablados[malHablado === 1]) {
-                            client.say(target, `¡CUIDADO CON EL LENGUAJE ${context["display-name"]}! Primer strike...`);
-                        } else if (recuentoMalHablados[malHablado === 2]) {
-                            client.say(target, `¡CUIDADO CON EL LENGUAJE ${context["display-name"]}! Segundo strike...`);
-                        } else if (recuentoMalHablados[malHablado > 2]) {
-                            client.say(target, `¡CUIDADO CON EL LENGUAJE ${context["display-name"]}! ¡¡Tercer strike y... OUT!!`);
-                        }
 
+                        var malHablado = `${context["display-name"]}`;
+                        var cuenta = 0;
+
+                        malHablados.push(malHablado)
+
+                        malHablados.forEach(elemento => {
+                            if (elemento === malHablado) {
+                                cuenta++;
+                            }
+                        })
+
+                        if (cuenta === 1) {
+                            client.say(target, `¡CUIDADO CON EL LENGUAJE ${context["display-name"]}! Primer strike...`);
+                        } else if (cuenta === 2) {
+                            client.say(target, `¡CUIDADO CON EL LENGUAJE ${context["display-name"]}! Segundo strike...`);
+                        } else if (cuenta >= 3) {
+                            client.say(target, `¡CUIDADO CON EL LENGUAJE ${context["display-name"]}! ¡¡Tercer strike y... OUT!!`);
+                            if (expulsados.includes(malHablado) === false){
+                                expulsados.push(malHablado);
+                            }
+                        }
                     }
                 })
             });
 
-            //palabras.forEach(palabra => console.log(palabra))
-
             if (palabras.includes('!hello')) {
                 // client.say(target, `¡Bienvenido ${context["display-name"]}! Llevas suscrito ${context["badge-info"].subscriber} meses`);
                 client.say(target, `¡Bienvenido ${context["display-name"]}!`);
-            } else if (palabras.includes('!caca')) {
-                client.say(target, `VAYA VAYA, CONQUE TE GUSTA HACER POPÓ ${context["display-name"]}`);
-                //console.log(context);
-            } else if (palabras.includes('!ruleta')) {
+            }
+
+            if (palabras.includes('!dados') && dados === true) {
 
                 if (context.username.toLowerCase() === options.identity.username) {
                     client.say(target, 'Un buen streamer no juega a los dados.');
@@ -101,16 +121,28 @@ export const conectar = (usuario, token, secretas, censuradas) => {
                     const sides = 6;
                     let numero = Math.floor(Math.random() * sides) + 1;
 
-                    if (numero >= 7) {
+                    if (numero <= 3) {
                         client.say(target, `Has sacado ${numero}. Te has salvado ${context["display-name"]}`);
                     } else {
                         //client.action(target, `/timeout ${username} 10`)
                         client.timeout(options.channels[0], context.username, 10, '¡Has fallado!')
-                        client.say(target, `¡La has cagado ${context["display-name"]}! Has sacado ${numero} y te has pegado un tiro.`);
+                        client.say(target, `¡La has cagado ${context["display-name"]}! Has sacado ${numero} y quedas expulsado temporalmente.`);
                         client.getOptions()
                     }
                 }
-            } else if (palabras.includes('!quitarbot') && context.username.toLowerCase() === options.identity.username) {
+            }
+
+            if (palabras.includes('!quitarbot') && context.username.toLowerCase() === options.identity.username) {
+                
+                var current = new Date();
+                var dia = current.toLocaleDateString();
+                var diaFormateado = dia.replace('/', '.');
+                var fechaFormateada = diaFormateado.replace('/', '.');
+                var id = email + '-' + fechaFormateada;
+                console.log(id);
+                console.log(usuarios.toString());
+                console.log(expulsados.toString());
+                cargarDatosStreaming(id, usuarios.toString(), expulsados.toString(), current.toLocaleTimeString())
                 client.say(target, 'Bot desconectado.');
                 client.disconnect();
             }
