@@ -3,7 +3,6 @@ import { createStackNavigator } from '@react-navigation/stack';
 import { StyleSheet } from 'react-native';
 import PantallaPerfilUsuario from './PantallaPerfilUsuario';
 
-
 const Stack = createStackNavigator();
 
 const PantallaUsuarioIndex = () => {

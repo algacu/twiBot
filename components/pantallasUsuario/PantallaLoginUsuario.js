@@ -2,12 +2,9 @@ import * as React from 'react';
 import { useEffect, useState } from 'react';
 import { StyleSheet, Text, View, Image, SafeAreaView, Pressable, TextInput, Alert, StatusBar } from 'react-native';
 import global from '../Global'
-
 import { auth, db } from '../../firebase';
-import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from 'firebase/auth';
-import { collection, getDocs, getDoc, doc, setDoc } from 'firebase/firestore';
-import { useNavigation } from '@react-navigation/native';
-
+import { signInWithEmailAndPassword } from 'firebase/auth';
+import { getDoc, doc } from 'firebase/firestore';
 import { AuthContext } from '../../context';
 
 export const PantallaLoginUsuario = (props) => {
@@ -20,18 +17,16 @@ export const PantallaLoginUsuario = (props) => {
     const textoCrearCuenta = 'Registrarse'
     const textoEmail = 'Correo electrónico'
     const textoContrasenya = 'Contraseña'
-
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-
     const { signIn } = React.useContext(AuthContext);
 
+    //Pantalla para la recuperación de datos de Firestore, a partir del usuario logueado en la app.
     const getData = async (user) => {
         const docRef = doc(db, 'usuarios', user);
         const docSnap = await getDoc(docRef);
         if (docSnap.exists()) {
             console.log("Document data:", docSnap.data());
-            //const string = JSON.stringify(docSnap.data());
             const data = docSnap.data();
             global.user = data.usuario;
             global.token = data.token;
@@ -41,19 +36,9 @@ export const PantallaLoginUsuario = (props) => {
             global.email = data.email;
             global.nombre = data.nombre;
         } else {
-            // doc.data() will be undefined in this case
             console.log("¡No se ha encontrado al usuario en la BD!");
         }
     }
-
-    useEffect(() => {
-        // const unsuscribe = auth.onAuthStateChanged(user => {
-        //     if (user) {
-        //         navigation.navigate('PantallaUsuarioLoginOk')
-        //     }
-        // })
-        // return unsuscribe
-    }, [])
 
     const handleSignIn = () => {
         signInWithEmailAndPassword(auth, email, password)
@@ -110,6 +95,7 @@ export const PantallaLoginUsuario = (props) => {
         </SafeAreaView>
     );
 };
+
 const styles = StyleSheet.create({
     contenedor: {
         flex: 1,

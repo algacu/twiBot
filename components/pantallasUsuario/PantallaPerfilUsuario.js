@@ -46,7 +46,6 @@ const PantallaPerfilUsuario = (props) => {
                 global.dados = false;
                 global.email = '';
                 signOut();
-                //navigation.replace("PantallaUsuarioLogin")
             })
     }
 
@@ -81,6 +80,7 @@ const PantallaPerfilUsuario = (props) => {
         </SafeAreaView>
     );
 };
+
 const styles = StyleSheet.create({
     contenedor: {
         flex: 1,

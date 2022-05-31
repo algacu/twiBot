@@ -1,12 +1,11 @@
 import * as React from 'react';
 import { useEffect, useState } from 'react';
-import { StyleSheet, View, SafeAreaView, StatusBar, Image, Text, Pressable } from 'react-native'
+import { StyleSheet, View, SafeAreaView, StatusBar, Image, Text, Pressable, Platform } from 'react-native'
 import DateTimePickerModal from "react-native-modal-datetime-picker";
-import global from './Global';
 import { db } from '../firebase';
 import { doc, getDoc } from 'firebase/firestore';
 import { ScrollView } from 'react-native-gesture-handler';
-import { Platform } from 'react-native-web';
+import global from './Global';
 
 
 const PantallaDatos = (props) => {
@@ -15,13 +14,11 @@ const PantallaDatos = (props) => {
   const titulo = 'Datos de ' + canal;
   const logo = '../assets/logo_twiBOT.png';
   const textoBotonFecha = 'Selecciona fecha';
-
   const subtitulo = 'Elige la fecha del streaming\npara consultar los datos de ese día.';
   const textoCanal = 'Canal';
   const textoUsuariosChat = 'Usuarios que participaron:';
   const textoUsuariosExpulsados = 'Usuarios que fueron expulsados:';
   const textoFecha = 'Fecha del streaming';
-  const [cargando, setCargando] = useState(true);
   const [email, setEmail] = useState('');
   const [usuarioTwitch, setUsuarioTwitch] = useState('');
   const [fecha, setFecha] = useState('');
@@ -30,9 +27,8 @@ const PantallaDatos = (props) => {
 
   useEffect(() => {
     setTimeout(() => {
-      setCargando(false);
       cambiaDatos();
-    }, 2000)
+    }, 500)
   }, []);
 
   const cambiaDatos = () => {
@@ -51,8 +47,8 @@ const PantallaDatos = (props) => {
     const docSnap = await getDoc(docRef);
     if (docSnap.exists()) {
       const data = docSnap.data();
-      const usuarios = data.usuarios + ' ';
-      const expulsados = data.expulsados + ' ';
+      const usuarios = data.usuarios;
+      const expulsados = data.expulsados;
       setUsuarios(usuarios)
       setExpulsados(expulsados)
     } else {
@@ -75,21 +71,21 @@ const PantallaDatos = (props) => {
   const handleConfirm = (date) => {
 
     var fechaHora = date.toLocaleString();
+    var fechaDiaMesAnyo, fechaTroceada, mes, dia, anyo, nuevaFecha, fechaMostrar, fechas;
 
     if (Platform.OS === 'ios') {
-      const fechaDiaMesAnyo = fechaHora.split(',');
-      const fechaTroceada = fechaDiaMesAnyo[0].split('/');
-      const mes = fechaTroceada[0];
-      const dia = fechaTroceada[1];
-      const anyo = fechaTroceada[2];
-      const nuevaFecha = '-' + mes + '.' + dia + '.' + anyo;
-      const fechaMostrar = dia + ' - ' + mes + ' - ' + anyo;
+      fechaDiaMesAnyo = fechaHora.split(',');
+      fechaTroceada = fechaDiaMesAnyo[0].split('/');
+      dia = fechaTroceada[0];
+      mes = fechaTroceada[1];
+      anyo = fechaTroceada[2];
+      nuevaFecha = '-' + mes + '.' + dia + '.' + anyo;
+      fechaMostrar = dia + ' - ' + mes + ' - ' + anyo;
       console.log(nuevaFecha)
       confirmaFecha(nuevaFecha, fechaMostrar);
       hideDatePicker();
     } else {
-      const fechas = fechaHora.split(' ');
-      var mes = '';
+      fechas = fechaHora.split(' ');
       switch (fechas[1]) {
         case 'Jan':
           mes = '01';
@@ -129,12 +125,11 @@ const PantallaDatos = (props) => {
           break;
 
       }
-      
-      const dia = fechas[2];
-      const anyo = fechas[4];
-      const anyoCortado = anyo.substring(2,4);
-      const nuevaFecha = '-' + mes + '.' + dia + '.' + anyoCortado;
-      const fechaMostrar = dia + ' - ' + mes + ' - ' + anyo;
+      dia = fechas[2];
+      anyo = fechas[4];
+      anyoCortado = anyo.substring(2,4);
+      nuevaFecha = '-' + mes + '.' + dia + '.' + anyoCortado;
+      fechaMostrar = dia + ' - ' + mes + ' - ' + anyo;
       console.log(nuevaFecha)
       confirmaFecha(nuevaFecha, fechaMostrar);
       hideDatePicker();

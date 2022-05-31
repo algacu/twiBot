@@ -1,4 +1,3 @@
-import { StatusBar } from 'expo-status-bar';
 import * as React from 'react';
 import { useEffect, useState } from 'react';
 import { StyleSheet, ScrollView, Text, View, Image, Pressable, SafeAreaView, KeyboardAvoidingView, Alert } from 'react-native';
@@ -11,12 +10,10 @@ const PantallaConfigPaso3 = (props) => {
     const logo = '../../assets/logo_twiBOT.png';
     const titulo = 'Paso 3';
     const subtitulo = '¡Dale vida a tu bot!';
-
     const textoUsuario = 'Canal de Twitch:';
     const textoToken = 'Chat Token:';
     const textoBotonConectar = 'Conectar';
     const textoBotonAtras = 'Atrás';
-
     const user = global.user;
     const token = global.token;
     const palabrasSecretas = global.palabrasSecretas;
@@ -24,16 +21,6 @@ const PantallaConfigPaso3 = (props) => {
     const dados = global.dados;
     const email = global.email;
     const [tokenValido, setTokenValido] = useState('');
-
-    const alertWithoutButtons = () => {
-        const title = 'Conectando a Twitch';
-        const message = 'Enviando las credenciales de\ntu bot a Twitch...';
-        const arrayButtons = []
-        const alertOptions = {
-            cancelable: true,
-        };
-        Alert.alert(title, message, arrayButtons,  alertOptions);
-    }
 
     useEffect(() => {
         var longitudToken = token.length;
@@ -62,7 +49,7 @@ const PantallaConfigPaso3 = (props) => {
                         <MaterialCommunityIcons style={styles.subtitulo} name={tokenValido} color={'white'} size={20} />
                     </View>
                     <View style={styles.contenedorBoton}>
-                        <Pressable style={styles.botonVerde} onPress={() => { alertWithoutButtons(); conectar(user, email, token, palabrasSecretas, palabrasCensuradas, dados)}}>
+                        <Pressable style={styles.botonVerde} onPress={() => { Alert.alert('Conectando a Twitch' ,'Enviando las credenciales de\ntu bot a Twitch...'); conectar(user, email, token, palabrasSecretas, palabrasCensuradas, dados)}}>
                             <Text style={styles.textoBoton}>{textoBotonConectar}</Text>
                         </Pressable>
                     </View>
@@ -76,6 +63,7 @@ const PantallaConfigPaso3 = (props) => {
         </SafeAreaView>
     );
 };
+
 const styles = StyleSheet.create({
     contenedor: {
         flex: 1,

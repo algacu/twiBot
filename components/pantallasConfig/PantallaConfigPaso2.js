@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { StyleSheet, ScrollView, Text, Icon, View, Image, Pressable, SafeAreaView, KeyboardAvoidingView, Switch } from 'react-native';
 import { TextInput } from 'react-native-gesture-handler';
 import global from '../Global';
@@ -17,10 +17,8 @@ const PantallaConfigPaso2 = (props) => {
     const inputPalabrasSecretas = 'Palabras secretas:';
     const inputPalabrasCensuradas = 'Censura palabras:';
     const toggleSwitch1Texto = 'Juego de los dados';
-
     const [dados, setDados] = useState(global.dados);
     const activaDados = () => setDados(previousState => !previousState);
-
     const [palabrasSecretas, setPalabrasSecretas] = useState(global.palabrasSecretas);
     const [palabrasCensuradas, setPalabrasCensuradas] = useState(global.palabrasCensuradas);
     const [email] = useState(global.email);
@@ -53,15 +51,14 @@ const PantallaConfigPaso2 = (props) => {
                     <View style={styles.contenedorInput}>
                         <Text style={styles.textoInput}>{inputPalabrasSecretas}</Text>
                         <View flexDirection='row'>
-                            <TextInput style={styles.input} value={palabrasSecretas} onChangeText={setPalabrasSecretas} autoCapitalize='none'/>
+                            <TextInput style={styles.input} value={palabrasSecretas} onChangeText={setPalabrasSecretas} autoCapitalize='none' />
                             <Pressable style={styles.botonAyuda} onPress={() => props.navigation.navigate('PantallaAyudaPalabrasSecretas')}>
                                 <MaterialCommunityIcons name="help" color={'white'} size={20} />
                             </Pressable>
                         </View>
                         <Text style={styles.textoInput}>{inputPalabrasCensuradas}</Text>
-                        
                         <View flexDirection='row'>
-                        <TextInput style={styles.input} value={palabrasCensuradas} onChangeText={setPalabrasCensuradas} autoCapitalize='none'/>
+                            <TextInput style={styles.input} value={palabrasCensuradas} onChangeText={setPalabrasCensuradas} autoCapitalize='none' />
                             <Pressable style={styles.botonAyuda} onPress={() => props.navigation.navigate('PantallaAyudaPalabrasCensuradas')}>
                                 <MaterialCommunityIcons name="help" color={'white'} size={20} />
                             </Pressable>
@@ -79,8 +76,8 @@ const PantallaConfigPaso2 = (props) => {
                             value={dados}
                         />
                         <Pressable style={styles.botonAyuda2} onPress={() => props.navigation.navigate('PantallaAyudaDados')}>
-                                <MaterialCommunityIcons name="help" color={'white'} size={16} />
-                            </Pressable>
+                            <MaterialCommunityIcons name="help" color={'white'} size={16} />
+                        </Pressable>
                     </View>
                     <View style={styles.contenedorBotonSiguiente}>
                         <Pressable style={styles.botonVerde} onPress={() => { guardaVariablesGlobales(); props.navigation.navigate('PantallaConfigPaso3'); }}>
@@ -97,6 +94,7 @@ const PantallaConfigPaso2 = (props) => {
         </SafeAreaView>
     );
 };
+
 const styles = StyleSheet.create({
     contenedor: {
         flex: 1,
@@ -209,7 +207,7 @@ const styles = StyleSheet.create({
         marginLeft: 5,
         paddingVertical: 3,
         paddingHorizontal: 2,
-        marginTop:3,
+        marginTop: 3,
     },
     botonVerde: {
         alignItems: 'center',
@@ -262,6 +260,7 @@ const styles = StyleSheet.create({
         alignSelf: 'center',
     }
 });
+
 export default PantallaConfigPaso2;
 
 

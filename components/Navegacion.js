@@ -6,6 +6,9 @@ import PantallaConfigIndex from './pantallasConfig/PantallaConfigIndex';
 import PantallaChat from './PantallaChat';
 import PantallaDatos from './PantallaDatos';
 
+//Componente que define la navegación general por twiBot a través de Tabs o pestañas, 
+// que a su vez recuperan pantallas de tipo Stack para la navegación en cada uno de los 4 apartados.
+
 export const Navegacion = () => {
 
   const Tab = createBottomTabNavigator();

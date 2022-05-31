@@ -1,6 +1,5 @@
-import { StatusBar } from 'expo-status-bar';
 import * as React from 'react';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { StyleSheet, ScrollView, Text, View, Image, Pressable, Linking, SafeAreaView, KeyboardAvoidingView } from 'react-native';
 import { TextInput } from 'react-native-gesture-handler';
 import global from '../Global'
@@ -15,7 +14,6 @@ const PantallaConfigPaso1 = (props) => {
     const inputUsuario = 'Introduce tu usuario:';
     const inputToken = 'Copia y pega tu token:';
     const textoBotonSiguiente = 'Siguiente';
-
     const [user, setUser] = useState(global.user);
     const [token, setToken] = useState(global.token);
     const [email] = useState(global.email);
@@ -61,7 +59,7 @@ const PantallaConfigPaso1 = (props) => {
                     </View>
                     <View style={styles.contenedorInput}>
                         <Text style={styles.textoInput}>{inputToken}</Text>
-                        <TextInput style={styles.input} secureTextEntry={true} value={token} onChangeText={setToken} autoCapitalize='none' />
+                        <TextInput style={styles.input} secureTextEntry={false} value={token} onChangeText={setToken} autoCapitalize='none' />
                         <Text style={styles.textoInput}>{inputUsuario}</Text>
                         <TextInput style={styles.input} value={user} onChangeText={setUser} autoCapitalize='none' />
                     </View>

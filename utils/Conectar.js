@@ -1,6 +1,7 @@
-/*En esta carpeta encontramos varias funciones que son llamadas...*/
 import { Alert } from "react-native";
 import { cargarDatosStreaming } from "./FuncionesFirestore";
+
+//Función que configura y conecta el Chat-Bot al IRC de Twitch según los parámetros dados.
 
 export const conectar = (usuario, email, token, secretas, censuradas, dados) => {
 
@@ -27,34 +28,33 @@ export const conectar = (usuario, email, token, secretas, censuradas, dados) => 
     const malHablados = [];
     const usuarios = [];
     const expulsados = [];
-    const signos = ['.', ',', ';', ':', '-', '_', '/', ')', '(', '!']
-
+    const signos = ['.', ',', ';', ':', '-', '_', '/', ')', '(', '!'];
 
     try {
 
+        //Creamos el cliente de conexión (Bot) pasándole las parametrizaciones oportunas.
         const client = new tmi.client(options);
 
+        //Conectamos el cliente.
         client.connect()
             .then(() => {
-                Alert.alert('¡Conectado!', 'Bot conectado con éxito a\ntu canal de Twitch.\n\nPuedes desconectar el bot escribiendo\n!quitarbot en el chat.')
+                Alert.alert('¡Conectado!', 'Bot conectado con éxito a\ntu canal de Twitch.\n\nPuedes desconectar el bot escribiendo\n!quitarbot en el chat.');
             })
             .catch(() => {
                 Alert.alert('Error al conectar', 'Por favor, revisa tu usuario y token de Twitch');
             })
-
+        
+        //Acción que realiza el Bot en el chat de Twitch al conectarse.
         client.on('connected', (address, port) => {
-            client.action(options.channels[0], `¡Hola a todos! twiBot conectado a ${address}:${port}. ¡Probad a escribir "!hola" !`)
-            console.log(censuradas)
-            console.log(secretas)
+            client.action(options.channels[0], `¡Hola a todos! twiBot conectado a ${address}:${port}. ¡Probad a escribir "!hola" !`);
         });
 
+        //Función que permite indentificar y gestionar mensajes al Bot.
         client.on('chat', (target, context, message, self) => {
             if (self) return; //Si el mensaje viene por parte del bot, return (para no entrar en bucle).
 
-            //ANALIZAR EL CONTEXTO (función para controlar datos context)
             const mensaje = message.toLowerCase();
             const palabras = mensaje.split(" ");
-
             const usuario = `${context["display-name"]}`
             
             if (usuarios.includes(usuario) === false){
@@ -77,20 +77,17 @@ export const conectar = (usuario, email, token, secretas, censuradas, dados) => 
                         client.say(target, `¡${context["display-name"]} ha descubierto una palabra secreta: ${mayus}!`);
                     }
                 })
+
                 arrayPalabrasCensuradas.forEach(censurada => {
                     if (censurada === palabra) {
-
                         var malHablado = `${context["display-name"]}`;
                         var cuenta = 0;
-
                         malHablados.push(malHablado)
-
                         malHablados.forEach(elemento => {
                             if (elemento === malHablado) {
                                 cuenta++;
                             }
                         })
-
                         if (cuenta === 1) {
                             client.say(target, `¡CUIDADO CON EL LENGUAJE ${context["display-name"]}! Primer strike...`);
                         } else if (cuenta === 2) {
@@ -108,12 +105,10 @@ export const conectar = (usuario, email, token, secretas, censuradas, dados) => 
             });
 
             if (palabras.includes('!hola')) {
-                // client.say(target, `¡Bienvenido ${context["display-name"]}! Llevas suscrito ${context["badge-info"].subscriber} meses`);
                 client.say(target, `¡Bienvenid@ ${context["display-name"]}!`);
             }
 
             if (palabras.includes('!dados') && dados === true) {
-
                 if (context.username.toLowerCase() === options.identity.username) {
                     client.say(target, 'Un buen streamer no juega a los dados.');
                 } else {
@@ -129,19 +124,18 @@ export const conectar = (usuario, email, token, secretas, censuradas, dados) => 
             }
 
             if (palabras.includes('!quitarbot') && context.username.toLowerCase() === options.identity.username) {
-                
                 var current = new Date();
                 var dia = current.toLocaleDateString();
                 var diaFormateado = dia.replace('/', '.');
                 var fechaFormateada = diaFormateado.replace('/', '.');
                 var id = email + '-' + fechaFormateada;
-                cargarDatosStreaming(id, usuarios.toString(), expulsados.toString(), current.toLocaleTimeString())
+                //Cuando el bot recibe la instrucción de desconexión (!quitarbot), carga ciertos datos en Firestore con la ID del usuario.
+                cargarDatosStreaming(id, usuarios.toString(), expulsados.toString(), current.toLocaleTimeString());
                 client.say(target, 'twiBot desconectado.');
                 client.disconnect();
             }
-
         })
-
+        
     } catch (error) {
         console.log(error);
     }

@@ -3,6 +3,8 @@ import { WebView } from 'react-native-webview';
 import { StyleSheet, View, SafeAreaView, StatusBar, Image, Text } from 'react-native';
 import global from './Global';
 
+//Pantalla del apartado/tab/pestaña 'Chat', donde se integra el chat del canal de Twitch 
+// indicado a través de WebView. 
 const PantallaChat = (props) => {
 
   const canal = global.user;
@@ -62,6 +64,5 @@ const styles = StyleSheet.create({
     marginTop: 20,
   }
 });
-
 
 export default PantallaChat

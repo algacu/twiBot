@@ -1,6 +1,6 @@
 import * as React from 'react';
-import { useEffect, useState } from 'react';
-import { StyleSheet, Text, View, Image, SafeAreaView, Pressable, TextInput, Alert, StatusBar, KeyboardAvoidingView } from 'react-native';
+import { useState } from 'react';
+import { Platform, StyleSheet, Text, View, Image, SafeAreaView, Pressable, TextInput, Alert, KeyboardAvoidingView } from 'react-native';
 import { auth, db } from '../../firebase';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
 import { doc, setDoc, getDoc } from 'firebase/firestore';
@@ -17,14 +17,13 @@ export const PantallaCrearUsuario = (props) => {
     const textoEmail = 'Correo electrónico'
     const textoContrasenya = 'Contraseña de twiBot'
     const textoBotonLogin = 'Comenzar'
-
     const [nombre, setNombre] = useState('');
     const [usuarioTwitch, setUsuarioTwitch] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-
     const { signUp } = React.useContext(AuthContext);
 
+    //Función que carga datos en Firestore.
     const setData = async (userCredential) => {
         const email = userCredential.user.email;
         await setDoc(doc(db, 'usuarios', email), {
@@ -38,13 +37,13 @@ export const PantallaCrearUsuario = (props) => {
         });
     }
 
+    //Función que descarga los datos introducidos por el usuario
+    // y los guarda en variables globales para su uso en la app.
     const getData = async (user) => {
         const docRef = doc(db, 'usuarios', user);
         const docSnap = await getDoc(docRef);
-
         if (docSnap.exists()) {
             console.log("Document data:", docSnap.data());
-            //const string = JSON.stringify(docSnap.data());
             const data = docSnap.data();
             global.user = data.usuario;
             global.token = data.token;
@@ -88,22 +87,12 @@ export const PantallaCrearUsuario = (props) => {
             })
     }
 
-
-    // useEffect(() => {
-    //     // const unsuscribe = auth.onAuthStateChanged(user => {
-    //     //     if (user) {
-    //     //         navigation.navigate('PantallaUsuarioLoginOk')
-    //     //     }
-    //     // })
-    //     // return unsuscribe
-    // }, [])
-
     return (
         <SafeAreaView style={styles.contenedor}>
-            <View style={styles.contenedorImagen}>
-                <Image style={styles.imagen} source={require(logo)} />
-            </View>
-            <KeyboardAvoidingView style={{ flex: 1 }} behavior={Platform.OS === "ios" ? "position" : ""}>
+            <KeyboardAvoidingView behavior={Platform.OS === "ios" ? "position" : "position"}>
+                <View style={styles.contenedorImagen}>
+                    <Image style={styles.imagen} source={require(logo)} />
+                </View>
                 <View style={styles.contenedorTexto}>
                     <Text style={styles.titulo}>{titulo}</Text>
                     <Text style={styles.subtitulo}>{texto1}</Text>
@@ -127,6 +116,7 @@ export const PantallaCrearUsuario = (props) => {
         </SafeAreaView>
     );
 };
+
 const styles = StyleSheet.create({
     contenedor: {
         flex: 1,
@@ -144,7 +134,9 @@ const styles = StyleSheet.create({
         shadowColor: 'black',
         shadowOpacity: 0.3,
         elevation: 10,
-        backgroundColor: "black"
+        backgroundColor: "black",
+        alignItems: 'center',
+        alignSelf: 'center',
     },
     imagen: {
         height: '100%',

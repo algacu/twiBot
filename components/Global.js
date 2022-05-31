@@ -1,3 +1,4 @@
+//Variables globales para su uso en diferentes componentes de la App.
 
 export default {
     user: '',
