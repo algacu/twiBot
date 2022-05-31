@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { useEffect, useState } from 'react';
-import { StyleSheet, Text, View, Image, SafeAreaView, Pressable, TextInput, Alert, StatusBar } from 'react-native';
+import { StyleSheet, Text, View, Image, SafeAreaView, Pressable, TextInput, Alert, StatusBar, KeyboardAvoidingView } from 'react-native';
 import global from '../Global'
 import { auth, db } from '../../firebase';
 import { signInWithEmailAndPassword } from 'firebase/auth';
@@ -70,28 +70,30 @@ export const PantallaLoginUsuario = (props) => {
 
     return (
         <SafeAreaView style={styles.contenedor}>
-            <StatusBar barStyle="light-content" />
-            <View style={styles.contenedorImagen}>
-                <Image style={styles.imagen} source={require(logo)} />
-            </View>
-            <View style={styles.contenedorTexto}>
-                <Text style={styles.titulo}>{titulo}</Text>
-                <Text style={styles.texto1}>{texto1}</Text>
-            </View>
-            <View style={styles.contenedorInput}>
-                <Text style={styles.textoInput}>{textoEmail}</Text>
-                <TextInput style={styles.input} keyboardType='email-address' textContentType='emailAddress' value={email} onChangeText={setEmail} placeholder='email@email.com' placeholderTextColor = "rgba(0, 0, 0, 0.25)" autoCapitalize='none' />
-                <Text style={styles.textoInput}>{textoContrasenya}</Text>
-                <TextInput style={styles.input} secureTextEntry={true} value={password} onChangeText={setPassword} placeholder='contraseña' placeholderTextColor = "rgba(0, 0, 0, 0.25)" autoCapitalize='none' />
-            </View>
-            <View style={styles.contenedorBoton}>
-                <Pressable style={styles.botonVerde} onPress={handleSignIn}>
-                    <Text style={styles.texto}>{textoBotonLogin}</Text>
-                </Pressable>
-                <Pressable onPress={() => props.navigation.navigate('PantallaCrearUsuario')}>
-                    <Text style={styles.texto3}>{textoCrearCuenta}</Text>
-                </Pressable>
-            </View>
+            <KeyboardAvoidingView behavior={Platform.OS === "ios" ? "position" : "position"}>
+                <StatusBar barStyle="light-content" />
+                <View style={styles.contenedorImagen}>
+                    <Image style={styles.imagen} source={require(logo)} />
+                </View>
+                <View style={styles.contenedorTexto}>
+                    <Text style={styles.titulo}>{titulo}</Text>
+                    <Text style={styles.texto1}>{texto1}</Text>
+                </View>
+                <View style={styles.contenedorInput}>
+                    <Text style={styles.textoInput}>{textoEmail}</Text>
+                    <TextInput style={styles.input} keyboardType='email-address' textContentType='emailAddress' value={email} onChangeText={setEmail} placeholder='email@email.com' placeholderTextColor="rgba(0, 0, 0, 0.25)" autoCapitalize='none' />
+                    <Text style={styles.textoInput}>{textoContrasenya}</Text>
+                    <TextInput style={styles.input} secureTextEntry={true} value={password} onChangeText={setPassword} placeholder='contraseña' placeholderTextColor="rgba(0, 0, 0, 0.25)" autoCapitalize='none' />
+                </View>
+                <View style={styles.contenedorBoton}>
+                    <Pressable style={styles.botonVerde} onPress={handleSignIn}>
+                        <Text style={styles.texto}>{textoBotonLogin}</Text>
+                    </Pressable>
+                    <Pressable onPress={() => props.navigation.navigate('PantallaCrearUsuario')}>
+                        <Text style={styles.texto3}>{textoCrearCuenta}</Text>
+                    </Pressable>
+                </View>
+            </KeyboardAvoidingView>
         </SafeAreaView>
     );
 };
@@ -113,7 +115,9 @@ const styles = StyleSheet.create({
         shadowColor: 'black',
         shadowOpacity: 0.3,
         elevation: 10,
-        backgroundColor: "black"
+        backgroundColor: "black",
+        alignItems: 'center',
+        alignSelf: 'center',
     },
     imagen: {
         height: '100%',
@@ -192,6 +196,8 @@ const styles = StyleSheet.create({
         shadowColor: 'black',
         shadowOpacity: 0.3,
         elevation: 10,
+        alignItems: 'center',
+        alignSelf: 'center',
     },
     botonVerde: {
         alignItems: 'center',

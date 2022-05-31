@@ -79,8 +79,8 @@ const PantallaDatos = (props) => {
       dia = fechaTroceada[0];
       mes = fechaTroceada[1];
       anyo = fechaTroceada[2];
-      nuevaFecha = '-' + mes + '.' + dia + '.' + anyo;
-      fechaMostrar = dia + ' - ' + mes + ' - ' + anyo;
+      nuevaFecha = '-' + dia + '.' + mes + '.' + anyo;
+      fechaMostrar = mes + ' - ' + dia + ' - ' + anyo;
       console.log(nuevaFecha)
       confirmaFecha(nuevaFecha, fechaMostrar);
       hideDatePicker();

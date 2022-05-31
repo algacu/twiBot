@@ -200,6 +200,8 @@ const styles = StyleSheet.create({
         shadowColor: 'black',
         shadowOpacity: 0.3,
         elevation: 10,
+        alignItems: 'center',
+        alignSelf: 'center',
     },
     botonVerde: {
         alignItems: 'center',
